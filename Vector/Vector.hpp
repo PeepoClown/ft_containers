@@ -154,8 +154,7 @@ namespace ft
 		reference operator[] (size_type n)
 		{ return (this->_data[n]); }
 
-		const_reference
-		operator[] (size_type n) const
+		const_reference operator[] (size_type n) const
 		{ return (this->_data[n]); }
 
 		reference at(size_type n)
@@ -183,7 +182,6 @@ namespace ft
 
 		const_reference back() const
 		{ return (this->_data[this->_size - 1]); }
-
 
 		template<typename InputIterator>
 		void assign(InputIterator first, InputIterator last,
