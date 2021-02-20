@@ -6,10 +6,12 @@ class A{
 private :
 	int a;
 public :
-	A() : a(0) { std::cout << "a create\n"; }
+	A(int a = 0) : a(a) { std::cout << "a create\n"; }
 	~A(){ std::cout << "a delete\n"; }
 	A(const A& _a) : a(_a.a) { std::cout << "a copy\n"; }
 	A& operator= (const A& _a) { a = _a.a; std::cout << "a copy\n"; return (*this); }
+	int operator* () { return a; }
+	int* operator& () { return &a; }
 };
 
 int 	main()
@@ -19,23 +21,36 @@ int 	main()
 	for (size_t i = 0; i < 10; i++)
 		ft_vec.push_back(i);
 
-	std::cout << *(ft_vec.insert(ft_vec.end(), 111)) << std::endl;
-	ft_vec.insert(ft_vec.end(), 555);
-	std::cout << *(ft_vec.insert(ft_vec.begin(), 222)) << std::endl;
-	ft_vec.insert(--ft_vec.end(), 444);
-	ft_vec.insert(++ft_vec.begin(), 333);
-
-	ft_vec.insert(++ft_vec.begin(), 4, 5);
-
+	ft_vec.erase(ft_vec.end() - 1);
+	ft_vec.erase(ft_vec.end() - 1);
+	ft_vec.erase(++ft_vec.begin());
+	ft_vec.erase(--ft_vec.end());
 	for (ft::vector<int>::iterator it = ft_vec.begin(); it != ft_vec.end(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
-	ft::vector<int> ft_vec1(1, 10);
+	ft_vec.erase(ft_vec.begin() + 3, ft_vec.end() - 2);
+	ft_vec.erase(ft_vec.begin(), ft_vec.end() - 2);
 
-	ft_vec1.insert(ft_vec1.begin(), ft_vec.begin(), ft_vec.end());
+	for (ft::vector<int>::iterator it = ft_vec.begin(); it != ft_vec.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl << std::endl;
 
-	for (ft::vector<int>::iterator it = ft_vec1.begin(); it != ft_vec1.end(); it++)
+	std::vector<int> v;
+	for (size_t i = 0; i < 10; i++)
+		v.push_back(i);
+
+	v.erase(v.end() - 1);
+	v.erase(v.end() - 1);
+	v.erase(++v.begin());
+	v.erase(--v.end());
+	for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	v.erase(v.begin() + 3, v.end() - 2);
+	v.erase(v.begin(), v.end() - 2);
+
+	for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 
