@@ -6,17 +6,18 @@ class A{
 private :
 	int a;
 public :
-	A(int a = 0) : a(a) { std::cout << "a create\n"; }
+	explicit A(int a = 0) : a(a) { std::cout << "a create\n"; }
 	~A(){ std::cout << "a delete\n"; }
 	A(const A& _a) : a(_a.a) { std::cout << "a copy\n"; }
 	A& operator= (const A& _a) { a = _a.a; std::cout << "a copy\n"; return (*this); }
-	int operator* () { return a; }
-	int* operator& () { return &a; }
+	int operator* () const { return a; }
 };
 
 int 	main()
 {
 	ft::vector<int> ft_vec;
+
+	ft_vec.insert(ft_vec.begin(), 333333);
 
 	for (size_t i = 0; i < 10; i++)
 		ft_vec.push_back(i);
@@ -37,6 +38,9 @@ int 	main()
 	std::cout << std::endl << std::endl;
 
 	std::vector<int> v;
+
+	v.insert(v.begin(), 333333);
+
 	for (size_t i = 0; i < 10; i++)
 		v.push_back(i);
 

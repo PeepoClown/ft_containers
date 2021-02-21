@@ -2,7 +2,7 @@
 #include <cstddef>
 #include <limits>
 #include <stdexcept>
-#include "util.hpp"
+#include "Utils/util.hpp"
 #include "Vector/VectorIterator.hpp"
 
 namespace ft
@@ -34,7 +34,7 @@ namespace ft
 	private :
 		void reallocateData(size_type n)
 		{
-			if (this->_data != NULL)
+			if (this->_capacity)
 				this->_alloc.deallocate(this->_data, this->_capacity);
 			this->_capacity = n;
 			this->_data = this->_alloc.allocate(this->_capacity);
@@ -57,7 +57,7 @@ namespace ft
 
 	public :
 		explicit vector(const allocator_type &alloc = allocator_type())
-			: _data(NULL), _alloc(alloc), _size(0), _capacity(0) {}
+			: _data(NULL), _alloc(alloc), _size(0), _capacity(0) { }
 
 		explicit vector(size_type n, const value_type &val = value_type(),
 						const allocator_type &alloc = allocator_type())
@@ -145,7 +145,7 @@ namespace ft
 				this->_alloc.construct(newData + i, this->_data[i]);
 			for (size_type i = 0; i < this->_size; i++)
 				this->_alloc.destroy(this->_data + i);
-			if (this->_data != NULL)
+			if (this->_capacity)
 				this->_alloc.deallocate(this->_data, this->_capacity);
 			this->_capacity = n;
 			this->_data = newData;
