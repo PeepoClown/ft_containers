@@ -1,3 +1,6 @@
+#ifndef VECTOR_HPP
+#define VECTOR_HPP
+
 #include <memory>
 #include <cstddef>
 #include <limits>
@@ -114,7 +117,7 @@ namespace ft
 		{ return (this->_size); }
 
 		size_type max_size() const
-		{ return (std::numeric_limits<size_type>::max()) / sizeof(value_type); }
+		{ return (std::numeric_limits<size_type>::max() / sizeof(value_type)); }
 
 		void resize(size_type n, value_type val = value_type())
 		{
@@ -367,3 +370,5 @@ namespace ft
 	}
 
 }
+
+#endif

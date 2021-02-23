@@ -2,7 +2,8 @@
 #include <vector>
 #include "Vector/Vector.hpp"
 
-class A{
+class A
+		{
 private :
 	int a;
 public :
