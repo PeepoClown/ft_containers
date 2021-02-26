@@ -13,8 +13,10 @@ namespace ft
 		template <typename K, typename Alloc>
 		friend class list;
 
-		template <typename N>
+		template <typename N1>
 		friend class ListIterator;
+		template <typename N2>
+		friend class ListReverseIterator;
 
 		typedef T					value_type;
 		typedef ListNode*			node_pointer;

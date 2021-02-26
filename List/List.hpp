@@ -8,6 +8,8 @@
 #include "List/ListNode.hpp"
 #include "List/ListIterator.hpp"
 
+#include <iostream>
+
 namespace ft
 {
 
@@ -34,6 +36,58 @@ namespace ft
 		node*			_tail;
 		allocator_type	_alloc;
 		size_type		_size;
+
+	private :
+		template <typename Compare>
+		void MergeSort(node** headRef, Compare comp)
+		{
+			node* head = *headRef;
+			node* a = end()._ptr;
+			node* b = end()._ptr;
+
+			if (head == end()._ptr || head->_next == end()._ptr)
+				return ;
+			FrontBackSplit(head, &a, &b);
+			MergeSort(&a, comp);
+			MergeSort(&b, comp);
+			*headRef = SortedMerge(a, b, comp);
+		}
+
+		template <typename Compare>
+		node* SortedMerge(node* a, node* b, Compare comp)
+		{
+			node* result = end()._ptr;
+
+			if (a == end()._ptr)
+				return (b);
+			else if (b == end()._ptr)
+				return (a);
+			if (comp(a->_data, b->_data)) {
+				result = a;
+				result->_next = SortedMerge(a->_next, b, comp);
+			}
+			else {
+				result = b;
+				result->_next = SortedMerge(a, b->_next, comp);
+			}
+			return (result);
+		}
+
+		void FrontBackSplit(node* source, node** frontRef, node** backRef)
+		{
+			node* fast = source;
+			node* slow = source;
+			while (fast != end()._ptr) {
+				fast = fast->_next;
+				if (fast != end()._ptr && fast->_next != end()._ptr) {
+					slow = slow->_next;
+					fast = fast->_next;
+				}
+			}
+			*frontRef = source;
+			*backRef = slow->_next;
+			slow->_next = end()._ptr;
+		}
 
 	public :
 		/*
@@ -111,6 +165,9 @@ namespace ft
 		*/
 		list& operator= (const list& x)
 		{
+			clear();
+			delete this->_head;
+			delete this->_tail;
 			this->_head = new node();
 			this->_tail = new node();
 			this->_head->_next = this->_tail;
@@ -211,7 +268,7 @@ namespace ft
 		{ insert(end(), val); }
 
 		void pop_back()
-		{ erase(end()); }
+		{ erase(--end()); }
 
 		iterator insert(iterator position, const value_type& val)
 		{
@@ -245,11 +302,10 @@ namespace ft
 			if (this->_size <= 0)
 				return (iterator());
 
-			node* item = (position._ptr == this->_tail) ? position._ptr->_prev : position._ptr;
-			iterator result(item->_next);
-			item->_prev->_next = item->_next;
-			item->_next->_prev = item->_prev;
-			delete item;
+			iterator result(position._ptr->_next);
+			position._ptr->_prev->_next = position._ptr->_next;
+			position._ptr->_next->_prev = position._ptr->_prev;
+			delete position._ptr;
 			this->_size--;
 			return (result);
 		}
@@ -309,10 +365,8 @@ namespace ft
 			x._size--;
 		}
 
-		void splice(iterator position, list& _list, iterator first, iterator last)
+		void splice(iterator position, list& x, iterator first, iterator last)
 		{
-			size_type list_size = 0;
-			for (iterator it = first; it != last; it++, list_size++) ;
 			node* first_elem = first._ptr;
 			node* last_elem = last._ptr->_prev;
 			node* last_elem_next = last._ptr;
@@ -325,8 +379,8 @@ namespace ft
 			position_elem->_prev = last_elem;
 			last_elem->_next = position_elem;
 
-			this->_size += list_size;
-			_list._size -= list_size;
+			this->_size += ft::distance(first, last);
+			x._size -= ft::distance(first, last);
 		}
 
 		void splice(iterator position, list& x)
@@ -337,7 +391,7 @@ namespace ft
 			node* curr = this->_head->_next;
 			while (curr != this->_tail) {
 				node* tmp_next = curr->_next;
-				if (ft::equal(curr->_data, val)) {
+				if (!ft::less(curr->_data, val) && !ft::less(val, curr->_data)) {
 					node* tmp = curr;
 					tmp->_prev->_next = tmp->_next;
 					tmp->_next->_prev = tmp->_prev;
@@ -447,48 +501,38 @@ namespace ft
 
 		void sort()
 		{
-			node* start = this->_head->_next->_next;
-			while (start != this->_tail) {
-				node* prev = start->_prev;
-				node* curr = start;
-				if (ft::less(curr->_data, prev->_data)) {
-					node* tmp_prev_prev = prev->_prev;
-					node* tmp_curr_next = curr->_next;
-					curr->_prev = prev->_prev;
-					prev->_prev = curr;
-					curr->_next = prev;
-					prev->_next = tmp_curr_next;
-					tmp_prev_prev->_next = curr;
-					tmp_curr_next->_prev = prev;
-					start = this->_head->_next->_next;
-				}
-				else
-					start = start->_next;
+			MergeSort(&this->_head->_next, ft::less);
+			node* prev = this->_head;
+			node* tmp = begin()._ptr;
+			while (tmp != end()._ptr) {
+				tmp->_prev = prev;
+				prev = tmp;
+				tmp = tmp->_next;
 			}
+			this->_tail->_prev = prev;
 		}
 
-		template <class Compare>
+		template <typename Compare>
 		void sort(Compare comp)
 		{
-			node* start = this->_head->_next->_next;
-			while (start != this->_tail) {
-				node* prev = start->_prev;
-				node* curr = start;
-				if (comp(curr->_data, prev->_data)) {
-					node* tmp_prev_prev = prev->_prev;
-					node* tmp_curr_next = curr->_next;
-					curr->_prev = prev->_prev;
-					prev->_prev = curr;
-					curr->_next = prev;
-					prev->_next = tmp_curr_next;
-					tmp_prev_prev->_next = curr;
-					tmp_curr_next->_prev = prev;
-					start = this->_head->_next->_next;
-				}
-				else
-					start = start->_next;
+			MergeSort(&this->_head->_next, comp);
+			node* prev = this->_head;
+			node* tmp = begin()._ptr;
+			while (tmp != end()._ptr) {
+				tmp->_prev = prev;
+				prev = tmp;
+				tmp = tmp->_next;
 			}
+			this->_tail->_prev = prev;
 		}
+
+
+
+
+
+
+
+
 
 		/*
 		** reverse
@@ -507,14 +551,6 @@ namespace ft
 			ft::swap(this->_head, this->_tail);
 		}
 	};
-
-	/*
-	** swap
-	** identical to list::swap
-	*/
-	template <class T, class Alloc>
-	void swap(list<T, Alloc>& x, list<T, Alloc>& y)
-	{ x.swap(y); }
 
 	/*
 	** compare operators overload
@@ -561,6 +597,14 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator>= (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{ return (!(lhs < rhs)); }
+
+	/*
+	** swap
+	** identical to list::swap
+	*/
+	template <class T, class Alloc>
+	void swap(list<T, Alloc>& x, list<T, Alloc>& y)
+	{ x.swap(y); }
 
 }
 
