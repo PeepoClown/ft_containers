@@ -8,4 +8,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 include_directories(.)
 include_directories(List Utils)
 
-add_executable(containers List/List.hpp List/ListNode.hpp List/ListIterator.hpp listTest.cpp)
+add_executable(containers Utils/Tree.hpp Utils/TreeNode.hpp treeTest.cpp)
