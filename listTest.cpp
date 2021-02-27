@@ -30,26 +30,26 @@ int main() {
 
 	l.clear();
 	srand(time(NULL));
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 10000; i++)
 		l.push_back(rand() % 100);
 
-	size_t i = 0;
-	for (ft::list<int>::iterator it = l.begin(); it != l.end(); it++) {
-		std::cout << std::setw(5) << *it << " ";
-		if ((i + 1) % 10 == 0)
-			std::cout << std::endl;
-		i++;
-	}
-	std::cout << std::endl;
+//	size_t i = 0;
+//	for (ft::list<int>::iterator it = l.begin(); it != l.end(); it++) {
+//		std::cout << std::setw(5) << *it << " ";
+//		if ((i + 1) % 10 == 0)
+//			std::cout << std::endl;
+//		i++;
+//	}
+//	std::cout << std::endl;
 
 	l.sort();
 
-	i = 0;
-	for (ft::list<int>::iterator it = l.begin(); it != l.end(); it++) {
-		std::cout << std::setw(5) << *it << " ";
-		if ((i + 1) % 10 == 0)
-			std::cout << std::endl;
-		i++;
-	}
-	std::cout << std::endl;
+//	i = 0;
+//	for (ft::list<int>::iterator it = l.begin(); it != l.end(); it++) {
+//		std::cout << std::setw(5) << *it << " ";
+//		if ((i + 1) % 10 == 0)
+//			std::cout << std::endl;
+//		i++;
+//	}
+//	std::cout << std::endl;
 }

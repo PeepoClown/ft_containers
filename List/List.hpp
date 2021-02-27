@@ -47,6 +47,7 @@ namespace ft
 
 			if (head == end()._ptr || head->_next == end()._ptr)
 				return ;
+			
 			FrontBackSplit(head, &a, &b);
 			MergeSort(&a, comp);
 			MergeSort(&b, comp);
@@ -56,12 +57,13 @@ namespace ft
 		template <typename Compare>
 		node* SortedMerge(node* a, node* b, Compare comp)
 		{
-			node* result = end()._ptr;
+			node* result;
 
 			if (a == end()._ptr)
 				return (b);
-			else if (b == end()._ptr)
+			if (b == end()._ptr)
 				return (a);
+
 			if (comp(a->_data, b->_data)) {
 				result = a;
 				result->_next = SortedMerge(a->_next, b, comp);
@@ -501,7 +503,7 @@ namespace ft
 
 		void sort()
 		{
-			MergeSort(&this->_head->_next, ft::less);
+			MergeSort(&this->_head->_next, (ft::Less<T>()));
 			node* prev = this->_head;
 			node* tmp = begin()._ptr;
 			while (tmp != end()._ptr) {
@@ -525,14 +527,6 @@ namespace ft
 			}
 			this->_tail->_prev = prev;
 		}
-
-
-
-
-
-
-
-
 
 		/*
 		** reverse

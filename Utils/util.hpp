@@ -23,6 +23,13 @@ namespace ft
 	{ return (val1 < val2); }
 
 	template <typename T>
+	struct Less
+	{
+		bool operator() (const T& val1, const T& val2)
+		{ return (val1 < val2); }
+	};
+
+	template <typename T>
 	void swap(T& val1, T& val2)
 	{
 		T tmp = val1;
