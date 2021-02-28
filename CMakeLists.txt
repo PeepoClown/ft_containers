@@ -6,6 +6,6 @@ set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 
 include_directories(.)
-include_directories(List Utils)
+include_directories(Utils)
 
-add_executable(containers Utils/Tree.hpp Utils/TreeNode.hpp treeTest.cpp)
+add_executable(containers Utils/TreeNode.hpp Utils/Tree.hpp treeTest.cpp)

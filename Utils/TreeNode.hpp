@@ -3,14 +3,11 @@
 
 #include <cstddef>
 
+#define YELLOW true
+#define BLUE false
+
 namespace ft
 {
-
-	enum Color
-	{
-		BLUE = 0,
-		YELLOW = 1
-	};
 
 	template <typename T>
 	class TreeNode
@@ -27,11 +24,11 @@ namespace ft
 		node_pointer	_parent;
 		node_pointer	_left;
 		node_pointer	_right;
-		ft::Color 		_color;
+		bool 			_color;
 
 	public :
 		explicit TreeNode(const value_type& val = value_type(), node_pointer parent = NULL,
-						  node_pointer left = NULL, node_pointer right = NULL, ft::Color color = BLUE)
+						  node_pointer left = NULL, node_pointer right = NULL, bool color = BLUE)
 			: _data(val), _parent(parent), _left(left), _right(right), _color(color)
 		{ }
 

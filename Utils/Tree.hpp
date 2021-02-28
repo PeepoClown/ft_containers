@@ -5,7 +5,6 @@
 #include <iostream>
 #include "Utils/TreeNode.hpp"
 
-
 namespace ft
 {
 
@@ -28,158 +27,282 @@ namespace ft
 		// first, last
 		key_compare _compare;
 		size_type _size;
+		const static node _nullLeaf = node();
 
 	public :
 		explicit Tree(const key_compare& compare = key_compare())
 			: _root(NULL), _compare(compare), _size(0)
-		{ _root = new node(); }
+		{ _root = &this->_nullLeaf; }
 
-		void rotateLeft(node *x) {
-
-			/**************************
-			 *  rotate node x to left *
-			 **************************/
-
-			node *y = x->_right;
-
-			/* establish x->right link */
+		void rotateLeft(node* x)
+		{
+			node* y = x->_right;
 			x->_right = y->_left;
-			if (y->_left != NULL) y->_left->_parent = x;
+			if (y->_left != &this->_nullLeaf)
+				y->_left->_parent = x;
 
-			/* establish y->parent link */
-			if (y != NULL) y->_parent = x->_parent;
+			if (y != &this->_nullLeaf)
+				y->_parent = x->_parent;
 			if (x->_parent) {
 				if (x == x->_parent->_left)
 					x->_parent->_left = y;
 				else
 					x->_parent->_right = y;
-			} else {
-				this->_root = y;
 			}
+			else
+				this->_root = y;
 
-			/* link x and y */
 			y->_left = x;
-			if (x != NULL) x->_parent = y;
+			if (x != &this->_nullLeaf)
+				x->_parent = y;
 		}
 
-		void rotateRight(node *x) {
+		void rotateRight(node* x)
+		{
+			node* y = x->_left;
 
-			/****************************
-			 *  rotate node x to right  *
-			 ****************************/
-
-			node *y = x->_left;
-
-			/* establish x->left link */
 			x->_left = y->_right;
-			if (y->_right != NULL) y->_right->_parent = x;
+			if (y->_right != &this->_nullLeaf)
+				y->_right->_parent = x;
 
-			/* establish y->parent link */
-			if (y != NULL) y->_parent = x->_parent;
+			if (y != &this->_nullLeaf)
+				y->_parent = x->_parent;
 			if (x->_parent) {
 				if (x == x->_parent->_right)
 					x->_parent->_right = y;
 				else
 					x->_parent->_left = y;
-			} else {
-				this->_root = y;
 			}
+			else
+				this->_root = y;
 
-			/* link x and y */
 			y->_right = x;
-			if (x != NULL) x->_parent = y;
+			if (x != &this->_nullLeaf)
+				x->_parent = y;
 		}
 
-		void insertFixup(node* x) {
-
-			while (x != this->_root && x->_parent->_color == BLUE) {
-
+		void insertFixup(node* x)
+		{
+			while (x != this->_root && x->_parent->_color == YELLOW) {
 				if (x->_parent == x->_parent->_parent->_left) {
 					node* y = x->_parent->_parent->_right;
-					if (y->_color == BLUE) {
-						x->_parent->_color = YELLOW;
-						y->_color = YELLOW;
-						x->_parent->_parent->_color = BLUE;
-						x = x->_parent->_parent;
+					if (y->_color == YELLOW) {
+						x->parent->color = BLUE;
+						y->color = BLUE;
+						x->parent->parent->color = YELLOW;
+						x = x->parent->parent;
 					}
 					else {
-						if (x == x->_parent->_right) {
-							x = x->_parent;
+
+						/* uncle is BLACK */
+						if (x == x->parent->right) {
+							/* make x a left child */
+							x = x->parent;
 							rotateLeft(x);
 						}
 
-						x->_parent->_color = YELLOW;
-						x->_parent->_parent->_color = BLUE;
-						rotateRight(x->_parent->_parent);
+						/* recolor and rotate */
+						x->parent->color = BLUE;
+						x->parent->parent->color = YELLOW;
+						rotateRight(x->parent->parent);
 					}
-				}
-				else {
-					node* y = x->_parent->_parent->_left;
-					if (y->_color == BLUE) {
-						x->_parent->_color = YELLOW;
-						y->_color = YELLOW;
-						x->_parent->_parent->_color = BLUE;
-						x = x->_parent->_parent;
-					}
-					else {
-						if (x == x->_parent->_left) {
-							x = x->_parent;
+				} else {
+
+					/* mirror image of above code */
+					Node *y = x->parent->parent->left;
+					if (y->color == YELLOW) {
+
+						/* uncle is RED */
+						x->parent->color = BLUE;
+						y->color = BLUE;
+						x->parent->parent->color = YELLOW;
+						x = x->parent->parent;
+					} else {
+
+						/* uncle is BLACK */
+						if (x == x->parent->left) {
+							x = x->parent;
 							rotateRight(x);
 						}
-						x->_parent->_color = YELLOW;
-						x->_parent->_parent->_color = BLUE;
-						rotateLeft(x->_parent->_parent);
+						x->parent->color = BLUE;
+						x->parent->parent->color = YELLOW;
+						rotateLeft(x->parent->parent);
 					}
 				}
 			}
-			this->_root->_color = YELLOW;
+			root->color = BLUE;
 		}
 
-		node* insert(const value_type& data)
-		{
-			node* current = this->_root;
-			node* parent = NULL;
-			node* x;
+		Node *insertNode(T data) {
+			Node *current, *parent, *x;
 
-			while (current != NULL) {
-				if (data == current->_data)
-					return (current);
+			/***********************************************
+			 *  allocate node for data and insert in tree  *
+			 ***********************************************/
+
+			/* find where node belongs */
+			current = root;
+			parent = 0;
+			while (current != NIL) {
+				if (compEQ(data, current->data)) return (current);
 				parent = current;
-				if (data < current->_data)
-					current = current->_left;
-				else
-					current = current->_right;
+				current = compLT(data, current->data) ?
+						  current->left : current->right;
 			}
 
-			x = new node(data);
-			x->_parent = parent;
-
-			if (parent != NULL) {
-				if (data < parent->_data)
-					parent->_left = x;
-				else
-					parent->_right = x;
+			/* setup new node */
+			if ((x = (Node*)malloc (sizeof(*x))) == 0) {
+				printf ("insufficient memory (insertNode)\n");
+				exit(1);
 			}
-			else
-				this->_root = x;
+			x->data = data;
+			x->parent = parent;
+			x->left = NIL;
+			x->right = NIL;
+			x->color = YELLOW;
+
+			/* insert node in tree */
+			if(parent) {
+				if(compLT(data, parent->data))
+					parent->left = x;
+				else
+					parent->right = x;
+			} else {
+				root = x;
+			}
+
 			insertFixup(x);
-			this->_size++;
-			return (x);
+			return(x);
 		}
 
-		void traversal(node* root)
+//		void deleteFixup(Node *x) {
+//
+//			/*************************************
+//			 *  maintain Red-Black tree balance  *
+//			 *  after deleting node x            *
+//			 *************************************/
+//
+//			while (x != root && x->color == BLACK) {
+//				if (x == x->parent->left) {
+//					Node *w = x->parent->right;
+//					if (w->color == RED) {
+//						w->color = BLACK;
+//						x->parent->color = RED;
+//						rotateLeft (x->parent);
+//						w = x->parent->right;
+//					}
+//					if (w->left->color == BLACK && w->right->color == BLACK) {
+//						w->color = RED;
+//						x = x->parent;
+//					} else {
+//						if (w->right->color == BLACK) {
+//							w->left->color = BLACK;
+//							w->color = RED;
+//							rotateRight (w);
+//							w = x->parent->right;
+//						}
+//						w->color = x->parent->color;
+//						x->parent->color = BLACK;
+//						w->right->color = BLACK;
+//						rotateLeft (x->parent);
+//						x = root;
+//					}
+//				} else {
+//					Node *w = x->parent->left;
+//					if (w->color == RED) {
+//						w->color = BLACK;
+//						x->parent->color = RED;
+//						rotateRight (x->parent);
+//						w = x->parent->left;
+//					}
+//					if (w->right->color == BLACK && w->left->color == BLACK) {
+//						w->color = RED;
+//						x = x->parent;
+//					} else {
+//						if (w->left->color == BLACK) {
+//							w->right->color = BLACK;
+//							w->color = RED;
+//							rotateLeft (w);
+//							w = x->parent->left;
+//						}
+//						w->color = x->parent->color;
+//						x->parent->color = BLACK;
+//						w->left->color = BLACK;
+//						rotateRight (x->parent);
+//						x = root;
+//					}
+//				}
+//			}
+//			x->color = BLACK;
+//		}
+//
+//		void deleteNode(Node *z) {
+//			Node *x, *y;
+//
+//			/*****************************
+//			 *  delete node z from tree  *
+//			 *****************************/
+//
+//			if (!z || z == NIL) return;
+//
+//
+//			if (z->left == NIL || z->right == NIL) {
+//				/* y has a NIL node as a child */
+//				y = z;
+//			} else {
+//				/* find tree successor with a NIL node as a child */
+//				y = z->right;
+//				while (y->left != NIL) y = y->left;
+//			}
+//
+//			/* x is y's only child */
+//			if (y->left != NIL)
+//				x = y->left;
+//			else
+//				x = y->right;
+//
+//			/* remove y from the parent chain */
+//			x->parent = y->parent;
+//			if (y->parent)
+//				if (y == y->parent->left)
+//					y->parent->left = x;
+//				else
+//					y->parent->right = x;
+//			else
+//				root = x;
+//
+//			if (y != z) z->data = y->data;
+//
+//
+//			if (y->color == BLACK)
+//				deleteFixup (x);
+//
+//			free (y);
+//		}
+//
+//		Node *findNode(T data) {
+//
+//			/*******************************
+//			 *  find node containing data  *
+//			 *******************************/
+//
+//			Node *current = root;
+//			while(current != NIL)
+//				if(compEQ(data, current->data))
+//					return (current);
+//				else
+//					current = compLT (data, current->data) ?
+//							  current->left : current->right;
+//			return(0);
+//		}
+
+		void traversal(Node* root)
 		{
-			if (root == NULL)
+			if (root == NIL)
 				return ;
-			traversal(root->_left);
-			std::cout << root->_data << " : " << (root->_color == YELLOW) << std::endl;
-			traversal(root->_right);
-		}
-
-		void traversal()
-		{
-			std::cout << "tree with size: " << this->_size << std::endl;
-			traversal(this->_root);
+			traversal(root->left);
+			std::cout << "node: " << root->data << " color: " << root->color << std::endl;
+			traversal(root->right);
 		}
 	};
 
