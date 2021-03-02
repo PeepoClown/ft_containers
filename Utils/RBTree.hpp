@@ -224,6 +224,23 @@ namespace ft
 				std::cout << "found limit node, with addr: " << x << std::endl;
 		}
 
+		void print(node* root, int deep)
+		{
+			if (root != NULL) {
+				print(root->_right, deep + 1);
+				if (root->_color == BLACK)
+					std::cout << "\e[34m";
+				else if (root->_color == RED)
+					std::cout << "\e[33m";
+				for (int i = 0; i < deep; i++)
+					std::cout << "    ";
+				if (root != this->_first && root != this->_last)
+					std::cout << root->_data << "\e[0m" << "\n";
+				print(root->_left, deep + 1);
+			}
+			std::cout << "\e[0m";
+		}
+
 	public :
 		explicit Tree(const key_compare& cmp = key_compare())
 			: _root(NULL), _cmp(cmp), _size(0)
@@ -436,6 +453,9 @@ namespace ft
 			std::cout << "tree with size: " << this->_size << std::endl;
 			traversal(this->_root);
 		}
+
+		void show()
+		{ print(this->_root, 10); }
 	};
 
 }
