@@ -14,18 +14,18 @@ namespace ft
 	class Tree
 	{
 	public :
-		typedef T value_type;
-		typedef TreeNode<value_type> node;
-		typedef value_type& reference;
-		typedef const value_type& const_reference;
-		typedef value_type* pointer;
-		typedef const value_type* const_pointer;
-		typedef TreeIterator<value_type> iterator;
-		typedef TreeReverseIterator<value_type> reverse_iterator;
-		typedef TreeConstIterator<value_type> const_iterator;
-		typedef TreeConstReverseIterator<value_type> const_reverse_iterator;
-		typedef size_t size_type;
-		typedef Compare key_compare;
+		typedef T										value_type;
+		typedef TreeNode<value_type>					node;
+		typedef value_type&								reference;
+		typedef const value_type&						const_reference;
+		typedef value_type*								pointer;
+		typedef const value_type*						const_pointer;
+		typedef TreeIterator<value_type>				iterator;
+		typedef TreeReverseIterator<value_type>			reverse_iterator;
+		typedef TreeConstIterator<value_type>			const_iterator;
+		typedef TreeConstReverseIterator<value_type>	const_reverse_iterator;
+		typedef size_t									size_type;
+		typedef Compare									key_compare;
 
 	private :
 		node*		_root;
@@ -205,9 +205,6 @@ namespace ft
 
 
 
-
-
-
 		void traversal(node* x) const
 		{
 			if (x == NULL)
@@ -278,16 +275,16 @@ namespace ft
 		{ return (const_iterator(this->_last)); }
 
 		reverse_iterator rbegin()
-		{ return (reverse_iterator(this->_first->_parent)); }
+		{ return (reverse_iterator(this->_last->_parent)); }
 
 		reverse_iterator rend()
-		{ return (reverse_iterator(this->_last)); }
+		{ return (reverse_iterator(this->_first)); }
 
 		const_reverse_iterator rbegin() const
-		{ return (const_reverse_iterator(this->_first->_parent)); }
+		{ return (const_reverse_iterator(this->_last->_parent)); }
 
 		const_reverse_iterator rend() const
-		{ return (const_reverse_iterator(this->_last)); }
+		{ return (const_reverse_iterator(this->_first)); }
 
 		void clear()
 		{
@@ -418,17 +415,10 @@ namespace ft
 
 		size_type count(const value_type& data) const
 		{
-			node* item = this->_root;
 			size_type result = 0;
-			while (item != NULL && item != this->_first && item != this->_last) {
-				if (this->_cmp(data, item->_data))
-					item = item->_left;
-				else if (this->_cmp(item->_data, data))
-					item = item->_right;
-				else {
+			for (iterator it = begin(); it != end(); it++) {
+				if (!this->_cmp(data, *it) && !this->_cmp(*it, data))
 					result++;
-					item = item->_right;
-				}
 			}
 			return (result);
 		}
