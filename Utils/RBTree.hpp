@@ -137,10 +137,17 @@ namespace ft
 			this->_root->_color = BLACK;
 		}
 
-
-
-
-
+		void transplant(node* x, node* y)
+		{
+			if (x != NULL && x->_parent == NULL)
+				this->_root = y;
+			else if (x == x->_parent->_left)
+				x->_parent->_left = y;
+			else if (x == x->_parent->_right)
+				x->_parent->_right = y;
+			if (y != NULL)
+				y->_parent = x->_parent;
+		}
 
 		void eraseFixup(node* x)
 		{
@@ -152,7 +159,7 @@ namespace ft
 					if (w->_color == RED) {
 						w->_color = BLACK;
 						x->_parent->_color = RED;
-						rotateLeft (x->_parent);
+						rotateLeft(x->_parent);
 						w = x->_parent->_right;
 					}
 					if (w->_left->_color == BLACK && w->_right->_color == BLACK) {
@@ -163,13 +170,13 @@ namespace ft
 						if (w->_right->_color == BLACK) {
 							w->_left->_color = BLACK;
 							w->_color = RED;
-							rotateRight (w);
+							rotateRight(w);
 							w = x->_parent->_right;
 						}
 						w->_color = x->_parent->_color;
 						x->_parent->_color = BLACK;
 						w->_right->_color = BLACK;
-						rotateLeft (x->_parent);
+						rotateLeft(x->_parent);
 						x = this->_root;
 					}
 				}
@@ -178,7 +185,7 @@ namespace ft
 					if (w->_color == RED) {
 						w->_color = BLACK;
 						x->_parent->_color = RED;
-						rotateRight (x->_parent);
+						rotateRight(x->_parent);
 						w = x->_parent->_left;
 					}
 					if (w->_right->_color == BLACK && w->_left->_color == BLACK) {
@@ -189,13 +196,13 @@ namespace ft
 						if (w->_left->_color == BLACK) {
 							w->_right->_color = BLACK;
 							w->_color = RED;
-							rotateLeft (w);
+							rotateLeft(w);
 							w = x->_parent->_left;
 						}
 						w->_color = x->_parent->_color;
 						x->_parent->_color = BLACK;
 						w->_left->_color = BLACK;
-						rotateRight (x->_parent);
+						rotateRight(x->_parent);
 						x = this->_root;
 					}
 				}
@@ -203,15 +210,13 @@ namespace ft
 			x->_color = BLACK;
 		}
 
-
-
 		void traversal(node* x) const
 		{
 			if (x == NULL)
 				return ;
 			traversal(x->_left);
 			traversal(x->_right);
-			std::string color = x->_color == RED ? "\e[31m" : "\e[90m";
+			std::string color = x->_color == RED ? "\e[33m" : "\e[34m";
 			if (x != this->_first && x != this->_last)
 				std::cout << "node: " << color << "[" << x->_data << "]" << "\e[0m" << "    addr: " << x << ", left: "
 					<< x->_left << ", right: " << x->_right << ", parent: " << x->_parent << std::endl;
@@ -350,54 +355,48 @@ namespace ft
 			}
 		}
 
-
-
-
 		void erase(node* x)
 		{
-			node* y;
 			if (x == NULL || x == this->_first || x == this->_last)
 				return ;
-			if (x->_left == NULL || x->_right == NULL)
-				y = x;
-			else { // minimum element in right sub tree
+
+			node* y = x;
+			bool color = y->_color;
+			node* z;
+
+			if (x->_left == NULL) {
+				z = x->_right;
+				transplant(x, x->_right);
+			}
+			else if (x->_right == NULL) {
+				z = x->_left;
+				transplant(x, x->_left);
+			}
+			else {
 				y = x->_right;
 				while (y->_left != NULL)
 					y = y->_left;
-			}
-
-			node* z;
-			if (y->_left != NULL)
-				z = y->_left;
-			else
+				color = y->_color;
 				z = y->_right;
-
-			if (z != NULL)
-				z->_parent = y->_parent;
-			if (y->_parent != NULL) {
-				if (y == y->_parent->_left)
-					y->_parent->_left = z;
-				else if (y == y->_parent->_right)
-					y->_parent->_right = z;
+				if (y->_parent == x)
+					z->_parent = x;
+				else {
+					transplant(y, y->_right);
+					y->_right = x->_right;
+					y->_right->_parent = y;
+				}
+				transplant(x, y);
+				y->_left = x->_left;
+				y->_left->_parent = y;
+				y->_color = x->_color;
 			}
-			else
-				this->_root = z;
 
-			if (y != x)
-				x->_data = y->_data;
+			if (color == BLACK)
+				eraseFixup(z);
 
-			 if (y->_color == BLACK)
-				 eraseFixup(z);
-			delete y;
+			delete x;
 			this->_size--;
 		}
-
-
-
-
-
-
-
 
 		node* find(const value_type& data) const
 		{

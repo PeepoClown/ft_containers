@@ -13,10 +13,14 @@ namespace ft
 		template <typename K, typename Alloc>
 		friend class list;
 
-		template <typename N1>
+		template <typename K>
 		friend class ListIterator;
-		template <typename N2>
+		template <typename K>
 		friend class ListReverseIterator;
+		template <typename K>
+		friend class ListConstIterator;
+		template <typename K>
+		friend class ListConstReverseIterator;
 
 		typedef T					value_type;
 		typedef ListNode*			node_pointer;
@@ -37,9 +41,6 @@ namespace ft
 			: _data(node._data), _next(node._next), _prev(node._prev)
 		{ }
 
-		~ListNode()
-		{ }
-
 		ListNode& operator= (const ListNode& node)
 		{
 			this->_data = node._data;
@@ -47,6 +48,9 @@ namespace ft
 			this->_prev = node._prev;
 			return (*this);
 		}
+
+		~ListNode()
+		{ }
 	};
 
 }

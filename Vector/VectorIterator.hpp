@@ -9,9 +9,10 @@ namespace ft
 	class VectorIterator
 	{
 	public :
-		typedef T*		pointer;
-		typedef T&		reference;
-		typedef size_t	size_type;
+		typedef T				value_type;
+		typedef value_type*		pointer;
+		typedef value_type&		reference;
+		typedef size_t			size_type;
 
 	protected :
 		pointer _ptr;
@@ -23,13 +24,14 @@ namespace ft
 		VectorIterator(const VectorIterator& it)
 			: _ptr(it._ptr) { }
 
-		virtual ~VectorIterator() { }
-
 		VectorIterator& operator= (const VectorIterator& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
 		}
+
+		virtual ~VectorIterator()
+		{ }
 
 		bool operator== (const VectorIterator& it) const
 		{ return (this->_ptr == it._ptr); }
@@ -107,9 +109,10 @@ namespace ft
 	class VectorReverseIterator
 	{
 	public :
-		typedef T*		pointer;
-		typedef T&		reference;
-		typedef size_t	size_type;
+		typedef T				value_type;
+		typedef value_type*		pointer;
+		typedef value_type&		reference;
+		typedef size_t			size_type;
 
 	protected :
 		pointer _ptr;
@@ -121,13 +124,14 @@ namespace ft
 		VectorReverseIterator(const VectorReverseIterator& it)
 				: _ptr(it._ptr) { }
 
-		virtual ~VectorReverseIterator() { }
-
 		VectorReverseIterator& operator= (const VectorReverseIterator& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
 		}
+
+		virtual ~VectorReverseIterator()
+		{ }
 
 		bool operator== (const VectorReverseIterator& it) const
 		{ return (this->_ptr == it._ptr); }
@@ -205,19 +209,16 @@ namespace ft
 	class VectorConstIterator : public VectorIterator<T>
 	{
 	public :
-		typedef size_t		size_type;
-		typedef T*			pointer;
-		typedef const T&	const_reference;
+		typedef T					value_type;
+		typedef size_t				size_type;
+		typedef value_type*			pointer;
+		typedef const value_type&	const_reference;
 
-	public :
 		explicit VectorConstIterator(pointer ptr = NULL)
 		{ this->_ptr = ptr; }
 
 		VectorConstIterator(const VectorConstIterator& it)
 		{ this->_ptr = it._ptr; }
-
-		virtual ~VectorConstIterator()
-		{ }
 
 		VectorConstIterator& operator= (const VectorConstIterator& it)
 		{
@@ -225,10 +226,15 @@ namespace ft
 			return (*this);
 		}
 
+		virtual ~VectorConstIterator()
+		{ }
+
 		const_reference operator* () const
 		{ return (*(this->_ptr)); }
+
 		const_reference operator-> () const
 		{ return (this->_ptr); }
+
 		const_reference operator[] (size_type index) const
 		{ return (*(this->_ptr + index)); }
 	};
@@ -237,19 +243,16 @@ namespace ft
 	class VectorConstReverseIterator : public VectorReverseIterator<T>
 	{
 	public :
-		typedef size_t		size_type;
-		typedef T*			pointer;
-		typedef const T&	const_reference;
+		typedef T					value_type;
+		typedef size_t				size_type;
+		typedef value_type*			pointer;
+		typedef const value_type&	const_reference;
 
-	public :
 		explicit VectorConstReverseIterator(pointer ptr = NULL)
 		{ this->_ptr = ptr; }
 
 		VectorConstReverseIterator(const VectorConstReverseIterator& it)
 		{ this->_ptr = it._ptr; }
-
-		virtual ~VectorConstReverseIterator()
-		{ }
 
 		VectorConstReverseIterator& operator= (const VectorConstReverseIterator& it)
 		{
@@ -257,10 +260,15 @@ namespace ft
 			return (*this);
 		}
 
+		virtual ~VectorConstReverseIterator()
+		{ }
+
 		const_reference operator* () const
 		{ return (*(this->_ptr)); }
+
 		const_reference operator-> () const
 		{ return (this->_ptr); }
+
 		const_reference operator[] (size_type index) const
 		{ return (*(this->_ptr + index)); }
 	};

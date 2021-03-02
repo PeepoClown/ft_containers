@@ -6,7 +6,7 @@
 #include <limits>
 #include <stdexcept>
 #include "Utils/util.hpp"
-#include "Vector/VectorIterator.hpp"
+#include "VectorIterator.hpp"
 
 namespace ft
 {
@@ -34,7 +34,6 @@ namespace ft
 		size_type		_size;
 		size_type		_capacity;
 
-	private :
 		void reallocateData(size_type n)
 		{
 			if (this->_capacity)
@@ -77,16 +76,16 @@ namespace ft
 			: _data(NULL), _alloc(x._alloc), _size(0), _capacity(0)
 		{ assign(x.begin(), x.end()); }
 
-		~vector()
-		{
-			clear();
-			this->_alloc.deallocate(this->_data, this->_capacity);
-		}
-
 		vector &operator=(const vector &x)
 		{
 			assign(x.begin(), x.end());
 			return (*this);
+		}
+
+		~vector()
+		{
+			clear();
+			this->_alloc.deallocate(this->_data, this->_capacity);
 		}
 
 		iterator begin()

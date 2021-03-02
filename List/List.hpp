@@ -5,8 +5,8 @@
 #include <cstddef>
 #include <limits>
 #include "Utils/util.hpp"
-#include "List/ListNode.hpp"
-#include "List/ListIterator.hpp"
+#include "ListNode.hpp"
+#include "ListIterator.hpp"
 
 namespace ft
 {
@@ -35,7 +35,6 @@ namespace ft
 		allocator_type	_alloc;
 		size_type		_size;
 
-	private :
 		template <typename Compare>
 		void MergeSort(node** headRef, Compare comp)
 		{
@@ -149,17 +148,6 @@ namespace ft
 		}
 
 		/*
-		** destructor
-		** delete list and its elements
-		*/
-		~list()
-		{
-			clear();
-			delete this->_head;
-			delete this->_tail;
-		}
-
-		/*
 		** assignation operator overload
 		** same as copy constructor but returns list
 		*/
@@ -174,6 +162,17 @@ namespace ft
 			this->_tail->_prev = this->_head;
 			assign(x.begin(), x.end());
 			return (*this);
+		}
+
+		/*
+		** destructor
+		** delete list and its elements
+		*/
+		~list()
+		{
+			clear();
+			delete this->_head;
+			delete this->_tail;
 		}
 
 		/*
@@ -252,6 +251,7 @@ namespace ft
 			clear();
 			insert(begin(), first, last);
 		}
+
 		void assign(size_type n, const value_type& val)
 		{
 			clear();
