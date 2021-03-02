@@ -8,8 +8,6 @@
 #include "List/ListNode.hpp"
 #include "List/ListIterator.hpp"
 
-#include <iostream>
-
 namespace ft
 {
 

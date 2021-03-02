@@ -150,7 +150,7 @@ namespace ft
 	};
 
 	template <typename T>
-	class ListConstIterator
+	class ListConstIterator : public ListIterator<T>
 	{
 	public :
 		template <typename K, typename Alloc>
@@ -189,7 +189,7 @@ namespace ft
 	};
 
 	template <typename T>
-	class ListConstReverseIterator
+	class ListConstReverseIterator : public ListReverseIterator<T>
 	{
 	public :
 		template <typename K, typename Alloc>
