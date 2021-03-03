@@ -345,7 +345,7 @@ namespace ft
 						return (std::pair<iterator, bool>(iterator(item), true));
 					}
 				}
-				else if (this->_cmp(x->_data, val) || (isMulti && !this->_cmp(x->_data, val))) {
+				else if ((!isMulti && this->_cmp(x->_data, val)) || (isMulti && !this->_cmp(val, x->_data))) {
 					if (x->_right != NULL && x->_right != this->_last)
 						x = x->_right;
 					else {
@@ -456,9 +456,9 @@ namespace ft
 			std::cout << "tree with size: " << this->_size << std::endl;
 			traversal(this->_root);
 		}
-//
-//		void print()
-//		{ print(this->_root, 10); }
+
+		void print()
+		{ print(this->_root, 10); }
 	};
 
 }

@@ -26,30 +26,33 @@ int 	main()
     rbTree mapa;
 
 	for (int i = 0; i < 10; i++) {
+		if (i % 3 == 0) {
+			mapa.insert(i);
+		}
 		mapa.insert(i);
 	}
 
-	mapa.print();
-
-	mapa.erase(mapa.find(0));
-	mapa.erase(mapa.find(1));
-	mapa.erase(mapa.find(2));
-	mapa.erase(mapa.find(3));
-	mapa.erase(mapa.find(4));
-
-	mapa.print();
-
-	mapa.erase(mapa.find(5));
-	mapa.erase(mapa.find(6));
-	mapa.erase(mapa.find(7));
-
-	mapa.print();
-
-	mapa.erase(mapa.find(8));
-
-	mapa.print();
-
-	mapa.erase(mapa.find(9));
+//	mapa.print();
+//
+//	mapa.erase(mapa.find(0));
+//	mapa.erase(mapa.find(1));
+//	mapa.erase(mapa.find(2));
+//	mapa.erase(mapa.find(3));
+//	mapa.erase(mapa.find(4));
+//
+//	mapa.print();
+//
+//	mapa.erase(mapa.find(5));
+//	mapa.erase(mapa.find(6));
+//	mapa.erase(mapa.find(7));
+//
+//	mapa.print();
+//
+//	mapa.erase(mapa.find(8));
+//
+//	mapa.print();
+//
+//	mapa.erase(mapa.find(9));
 
 	mapa.print();
 }
