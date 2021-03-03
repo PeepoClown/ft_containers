@@ -93,16 +93,16 @@ namespace ft
 		{
 			if (x == NULL)
 				return ;
-			while (x != this->_root && x->_parent->_color == RED) {
+			while (x != this->_root && x->_parent->_color == YELLOW) {
 				node* parent = x->_parent;
 				node* grandParent = parent->_parent;
 				if (parent == grandParent->_left) {
 					node* uncle = grandParent->_right;
 					if (uncle != NULL && uncle != this->_first &&
-						uncle != this->_last && uncle->_color == RED) {
-						parent->_color = BLACK;
-						uncle->_color = BLACK;
-						grandParent->_color = RED;
+						uncle != this->_last && uncle->_color == YELLOW) {
+						parent->_color = BLUE;
+						uncle->_color = BLUE;
+						grandParent->_color = YELLOW;
 						x = grandParent;
 					}
 					else {
@@ -110,18 +110,18 @@ namespace ft
 							x = parent;
 							rotateLeft(x);
 						}
-						x->_parent->_color = BLACK;
-						x->_parent->_parent->_color = RED;
+						x->_parent->_color = BLUE;
+						x->_parent->_parent->_color = YELLOW;
 						rotateRight(x->_parent->_parent);
 					}
 				}
 				else if (parent == grandParent->_right) {
 					node* uncle = grandParent->_left;
 					if (uncle != NULL && uncle != this->_first &&
-					    uncle != this->_last && uncle->_color == RED) {
-						parent->_color = BLACK;
-						uncle->_color = BLACK;
-						grandParent->_color = RED;
+					    uncle != this->_last && uncle->_color == YELLOW) {
+						parent->_color = BLUE;
+						uncle->_color = BLUE;
+						grandParent->_color = YELLOW;
 						x = grandParent;
 					}
 					else {
@@ -129,13 +129,13 @@ namespace ft
 							x = parent;
 							rotateRight(x);
 						}
-						x->_parent->_color = BLACK;
-						x->_parent->_parent->_color = RED;
+						x->_parent->_color = BLUE;
+						x->_parent->_parent->_color = YELLOW;
 						rotateLeft(x->_parent->_parent);
 					}
 				}
 			}
-			this->_root->_color = BLACK;
+			this->_root->_color = BLUE;
 		}
 
 		void transplant(node* x, node* y)
@@ -154,70 +154,70 @@ namespace ft
 		{
 			if (x == NULL)
 				return ;
-			while (x != this->_root && x->_color == BLACK) {
+			while (x != this->_root && x->_color == BLUE) {
 				if (x == x->_parent->_left) {
 					node* y = x->_parent->_right;
-					if (y->_color == RED) {
-						y->_color = BLACK;
-						x->_parent->_color = RED;
+					if (y->_color == YELLOW) {
+						y->_color = BLUE;
+						x->_parent->_color = YELLOW;
 						rotateLeft(x->_parent);
 						y = x->_parent->_right;
 					}
-					if (y->_left->_color == BLACK && y->_right->_color == BLACK) {
-						y->_color = RED;
+					if (y->_left->_color == BLUE && y->_right->_color == BLUE) {
+						y->_color = YELLOW;
 						x = x->_parent;
 					}
 					else {
-						if (y->_right->_color == BLACK) {
-							y->_left->_color = BLACK;
-							y->_color = RED;
+						if (y->_right->_color == BLUE) {
+							y->_left->_color = BLUE;
+							y->_color = YELLOW;
 							rotateRight(y);
 							y = x->_parent->_right;
 						}
 						y->_color = x->_parent->_color;
-						x->_parent->_color = BLACK;
-						y->_right->_color = BLACK;
+						x->_parent->_color = BLUE;
+						y->_right->_color = BLUE;
 						rotateLeft(x->_parent);
 						x = this->_root;
 					}
 				}
 				else {
 					node* y = x->_parent->_left;
-					if (y->_color == RED) {
-						y->_color = BLACK;
-						x->_parent->_color = RED;
+					if (y->_color == YELLOW) {
+						y->_color = BLUE;
+						x->_parent->_color = YELLOW;
 						rotateRight(x->_parent);
 						y = x->_parent->_left;
 					}
-					if (y->_right->_color == BLACK && y->_left->_color == BLACK) {
-						y->_color = RED;
+					if (y->_right->_color == BLUE && y->_left->_color == BLUE) {
+						y->_color = YELLOW;
 						x = x->_parent;
 					}
 					else {
-						if (y->_left->_color == BLACK) {
-							y->_right->_color = BLACK;
-							y->_color = RED;
+						if (y->_left->_color == BLUE) {
+							y->_right->_color = BLUE;
+							y->_color = YELLOW;
 							rotateLeft(y);
 							y = x->_parent->_left;
 						}
 						y->_color = x->_parent->_color;
-						x->_parent->_color = BLACK;
-						y->_left->_color = BLACK;
+						x->_parent->_color = BLUE;
+						y->_left->_color = BLUE;
 						rotateRight(x->_parent);
 						x = this->_root;
 					}
 				}
 			}
-			x->_color = BLACK;
+			x->_color = BLUE;
 		}
 
 		void print(node* root, int deep)
 		{
 			if (root != NULL) {
 				print(root->_right, deep + 1);
-				if (root->_color == BLACK)
+				if (root->_color == BLUE)
 					std::cout << "\e[34m";
-				else if (root->_color == RED)
+				else if (root->_color == YELLOW)
 					std::cout << "\e[33m";
 				if (root != this->_first && root != this->_last)
 					for (int i = 0; i < deep; i++)
@@ -235,7 +235,7 @@ namespace ft
 				return ;
 			traversal(x->_left);
 			traversal(x->_right);
-			std::string color = x->_color == RED ? "\e[33m" : "\e[34m";
+			std::string color = x->_color == YELLOW ? "\e[33m" : "\e[34m";
 			if (x != this->_first && x != this->_last)
 				std::cout << "node: " << color << "[" << x->_data << "]" << "\e[0m" << "    addr: " << x << ", left: "
 					<< x->_left << ", right: " << x->_right << ", parent: " << x->_parent << std::endl;
@@ -323,7 +323,7 @@ namespace ft
 		std::pair<iterator, bool> insert(const value_type& val)
 		{
 			if (this->_size == 0) {
-				this->_root = new node(val, NULL, this->_first, this->_last, BLACK);
+				this->_root = new node(val, NULL, this->_first, this->_last, BLUE);
 				this->_first->_parent = this->_root;
 				this->_last->_parent = this->_root;
 				this->_size++;
@@ -336,7 +336,7 @@ namespace ft
 					if (x->_left != NULL && x->_left != this->_first)
 						x = x->_left;
 					else {
-						node* item = new node(val, x, x->_left, NULL, RED);
+						node* item = new node(val, x, x->_left, NULL);
 						if (x->_left != NULL)
 							x->_left->_parent = item;
 						x->_left = item;
@@ -349,7 +349,7 @@ namespace ft
 					if (x->_right != NULL && x->_right != this->_last)
 						x = x->_right;
 					else {
-						node* item = new node(val, x, NULL, x->_right, RED);
+						node* item = new node(val, x, NULL, x->_right);
 						if (x->_right != NULL)
 							x->_right->_parent = item;
 						x->_right = item;
@@ -411,7 +411,7 @@ namespace ft
 				y->_color = x->_color;
 			}
 
-			if (color == BLACK)
+			if (color == BLUE)
 				eraseFixup(z);
 
 			delete x;

@@ -3,8 +3,8 @@
 
 #include <cstddef>
 
-#define RED true // YELLOW
-#define BLACK false // BLUE
+#define YELLOW true
+#define BLUE false
 
 namespace ft
 {
@@ -37,7 +37,7 @@ namespace ft
 
 	public :
 		explicit TreeNode(const value_type& val = value_type(), node_pointer parent = NULL,
-		                  node_pointer left = NULL, node_pointer right = NULL, bool color = RED)
+		                  node_pointer left = NULL, node_pointer right = NULL, bool color = YELLOW)
 			: _data(val), _parent(parent), _left(left), _right(right), _color(color)
 		{ }
 
