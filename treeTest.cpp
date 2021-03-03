@@ -5,24 +5,51 @@ typedef ft::Tree<int, std::less<int>, true> rbTree;
 
 int 	main()
 {
-	rbTree tree;
-	for (size_t i = 0; i < 10; i++)
-		tree.insert(i);
-	std::cout << "36 found: " << tree.count(36) << std::endl;
-	tree.traversal();
-	tree.erase(tree.find(4));
-	tree.erase(tree.find(5));
-	std::cout << "iterating: ";
-	for (rbTree::reverse_iterator it = tree.rbegin(); it != tree.rend(); it++) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-	tree.traversal();
+//	rbTree tree;
+//	for (size_t i = 0; i < 10; i++)
+//		tree.insert(i);
+//
+//	tree.insert(15);
+//	tree.insert(20);
+//	tree.insert(25);
+//
+////	std::cout << "iterating: ";
+////	for (rbTree::reverse_iterator it = tree.rbegin(); it != tree.rend(); it++) {
+////		std::cout << *it << " ";
+////	}
+////	std::cout << std::endl;
+////
+////	tree.traversal();
+//
+//	tree.print();
 
-//	rbTree rbtree;
-//
-//	rbtree = tree;
-//
-//	std::cout << "copy tree" << std::endl;
-//	rbtree.traversal();
+    rbTree mapa;
+
+	for (int i = 0; i < 10; i++) {
+		mapa.insert(i);
+	}
+
+	mapa.print();
+
+	mapa.erase(mapa.find(0));
+	mapa.erase(mapa.find(1));
+	mapa.erase(mapa.find(2));
+	mapa.erase(mapa.find(3));
+	mapa.erase(mapa.find(4));
+
+	mapa.print();
+
+	mapa.erase(mapa.find(5));
+	mapa.erase(mapa.find(6));
+	mapa.erase(mapa.find(7));
+
+	mapa.print();
+
+	mapa.erase(mapa.find(8));
+
+	mapa.print();
+
+	mapa.erase(mapa.find(9));
+
+	mapa.print();
 }

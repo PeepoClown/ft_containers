@@ -2,6 +2,7 @@
 #define RBTREE_HPP
 
 #include <cstddef>
+#include <limits>
 #include <iostream>
 #include "../Utils/util.hpp"
 #include "RBTreeNode.hpp"
@@ -137,13 +138,6 @@ namespace ft
 			this->_root->_color = BLACK;
 		}
 
-
-
-
-
-
-
-
 		void transplant(node* x, node* y)
 		{
 			if (x != NULL && x->_parent == NULL)
@@ -162,53 +156,53 @@ namespace ft
 				return ;
 			while (x != this->_root && x->_color == BLACK) {
 				if (x == x->_parent->_left) {
-					node* w = x->_parent->_right;
-					if (w->_color == RED) {
-						w->_color = BLACK;
+					node* y = x->_parent->_right;
+					if (y->_color == RED) {
+						y->_color = BLACK;
 						x->_parent->_color = RED;
 						rotateLeft(x->_parent);
-						w = x->_parent->_right;
+						y = x->_parent->_right;
 					}
-					if (w->_left->_color == BLACK && w->_right->_color == BLACK) {
-						w->_color = RED;
+					if (y->_left->_color == BLACK && y->_right->_color == BLACK) {
+						y->_color = RED;
 						x = x->_parent;
 					}
 					else {
-						if (w->_right->_color == BLACK) {
-							w->_left->_color = BLACK;
-							w->_color = RED;
-							rotateRight(w);
-							w = x->_parent->_right;
+						if (y->_right->_color == BLACK) {
+							y->_left->_color = BLACK;
+							y->_color = RED;
+							rotateRight(y);
+							y = x->_parent->_right;
 						}
-						w->_color = x->_parent->_color;
+						y->_color = x->_parent->_color;
 						x->_parent->_color = BLACK;
-						w->_right->_color = BLACK;
+						y->_right->_color = BLACK;
 						rotateLeft(x->_parent);
 						x = this->_root;
 					}
 				}
 				else {
-					node* w = x->_parent->_left;
-					if (w->_color == RED) {
-						w->_color = BLACK;
+					node* y = x->_parent->_left;
+					if (y->_color == RED) {
+						y->_color = BLACK;
 						x->_parent->_color = RED;
 						rotateRight(x->_parent);
-						w = x->_parent->_left;
+						y = x->_parent->_left;
 					}
-					if (w->_right->_color == BLACK && w->_left->_color == BLACK) {
-						w->_color = RED;
+					if (y->_right->_color == BLACK && y->_left->_color == BLACK) {
+						y->_color = RED;
 						x = x->_parent;
 					}
 					else {
-						if (w->_left->_color == BLACK) {
-							w->_right->_color = BLACK;
-							w->_color = RED;
-							rotateLeft(w);
-							w = x->_parent->_left;
+						if (y->_left->_color == BLACK) {
+							y->_right->_color = BLACK;
+							y->_color = RED;
+							rotateLeft(y);
+							y = x->_parent->_left;
 						}
-						w->_color = x->_parent->_color;
+						y->_color = x->_parent->_color;
 						x->_parent->_color = BLACK;
-						w->_left->_color = BLACK;
+						y->_left->_color = BLACK;
 						rotateRight(x->_parent);
 						x = this->_root;
 					}
@@ -216,14 +210,6 @@ namespace ft
 			}
 			x->_color = BLACK;
 		}
-
-
-
-
-
-
-
-
 
 		void print(node* root, int deep)
 		{
@@ -233,7 +219,7 @@ namespace ft
 					std::cout << "\e[34m";
 				else if (root->_color == RED)
 					std::cout << "\e[33m";
-				if (root != this->_last)
+				if (root != this->_first && root != this->_last)
 					for (int i = 0; i < deep; i++)
 						std::cout << "    ";
 				if (root != this->_first && root != this->_last)
@@ -261,8 +247,8 @@ namespace ft
 		explicit Tree(const key_compare& cmp = key_compare())
 			: _root(NULL), _cmp(cmp), _size(0)
 		{
-			this->_first = new node(0, NULL, NULL, NULL, BLACK);
-			this->_last = new node(0, NULL, NULL, NULL, BLACK);
+			this->_first = new node();
+			this->_last = new node();
 			this->_first->_parent = this->_last;
 			this->_last->_parent = this->_first;
 		}
@@ -270,8 +256,8 @@ namespace ft
 		Tree(const Tree& tree)
 			: _root(NULL), _cmp(tree._cmp), _size(0)
 		{
-			this->_first = new node(0, NULL, NULL, NULL, BLACK);
-			this->_last = new node(0, NULL, NULL, NULL, BLACK);
+			this->_first = new node();
+			this->_last = new node();
 			this->_first->_parent = this->_last;
 			this->_last->_parent = this->_first;
 			insert(tree.begin(), tree.end());
@@ -282,8 +268,8 @@ namespace ft
 			clear();
 			delete this->_first;
 			delete this->_last;
-			this->_first = new node(0, NULL, NULL, NULL, BLACK);
-			this->_last = new node(0, NULL, NULL, NULL, BLACK);
+			this->_first = new node();
+			this->_last = new node();
 			this->_first->_parent = this->_last;
 			this->_last->_parent = this->_first;
 			this->_root = NULL;
@@ -388,14 +374,10 @@ namespace ft
 			}
 		}
 
-
-
-
-
-		void erase(node* x)
-		{
+		void erase(node* x) {
 			if (x == NULL || x == this->_first || x == this->_last)
-				return ;
+				return;
+
 			node* y = x;
 			node* z;
 			bool color = y->_color;
@@ -414,8 +396,10 @@ namespace ft
 					y = y->_left;
 				color = y->_color;
 				z = y->_right;
-				if (y->_parent == x)
-					z->_parent = x;
+				if (y->_parent == x) {
+					if (z != NULL)
+						z->_parent = y;
+				}
 				else {
 					transplant(y, y->_right);
 					y->_right = x->_right;
@@ -433,11 +417,6 @@ namespace ft
 			delete x;
 			this->_size--;
 		}
-
-
-
-
-
 
 		node* find(const value_type& data) const
 		{
@@ -477,9 +456,9 @@ namespace ft
 			std::cout << "tree with size: " << this->_size << std::endl;
 			traversal(this->_root);
 		}
-
-		void print()
-		{ print(this->_root, 20); }
+//
+//		void print()
+//		{ print(this->_root, 10); }
 	};
 
 }
