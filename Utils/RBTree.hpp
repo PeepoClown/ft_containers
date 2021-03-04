@@ -28,22 +28,22 @@ namespace ft
 		typedef size_t									size_type;
 		typedef Compare									key_compare;
 
-	private :
+	protected :
 		node*		_root;
 		node*		_first;
 		node*		_last;
 		key_compare	_cmp;
 		size_type	_size;
 
-		void remove(node* x)
+		void remove()
 		{
-			if (x == NULL)
-				return ;
-			remove(x->_left);
-			remove(x->_right);
-			if (x != this->_first && x != this->_last) {
-				this->_size--;
-				delete x;
+			iterator last = end();
+			iterator curr = begin(), next;
+			while (curr != last) {
+				next = ++curr;
+				--curr;
+				erase(curr);
+				curr = next;
 			}
 		}
 
@@ -211,24 +211,6 @@ namespace ft
 			x->_color = BLUE;
 		}
 
-		void print(node* root, int deep)
-		{
-			if (root != NULL) {
-				print(root->_right, deep + 1);
-				if (root->_color == BLUE)
-					std::cout << "\e[34m";
-				else if (root->_color == YELLOW)
-					std::cout << "\e[33m";
-				if (root != this->_first && root != this->_last)
-					for (int i = 0; i < deep; i++)
-						std::cout << "    ";
-				if (root != this->_first && root != this->_last)
-					std::cout << root->_data << "\e[0m" << "\n";
-				print(root->_left, deep + 1);
-			}
-			std::cout << "\e[0m";
-		}
-
 		void traversal(node* x) const
 		{
 			if (x == NULL)
@@ -237,7 +219,7 @@ namespace ft
 			traversal(x->_right);
 			std::string color = x->_color == YELLOW ? "\e[33m" : "\e[34m";
 			if (x != this->_first && x != this->_last)
-				std::cout << "node: " << color << "[" << x->_data << "]" << "\e[0m" << "    addr: " << x << ", left: "
+				std::cout << "node: " << color << "[" << x->_data.first << "]" << "\e[0m" << "    addr: " << x << ", left: "
 					<< x->_left << ", right: " << x->_right << ", parent: " << x->_parent << std::endl;
 			else
 				std::cout << "found limit node, with addr: " << x << std::endl;
@@ -310,9 +292,9 @@ namespace ft
 		const_reverse_iterator rend() const
 		{ return (const_reverse_iterator(this->_first)); }
 
-		void clear()
+		virtual void clear()
 		{
-			remove(this->_root);
+			remove();
 			this->_first->_parent = this->_last;
 			this->_last->_parent = this->_first;
 		}
@@ -325,7 +307,6 @@ namespace ft
 			if (this->_size == 0) {
 				this->_root = new node(val, NULL, this->_first, this->_last, BLUE);
 				this->_first->_parent = this->_root;
-				this->_last->_parent = this->_root;
 				this->_size++;
 				return (std::pair<iterator, bool>(iterator(this->_root), true));
 			}
@@ -364,17 +345,9 @@ namespace ft
 			return (std::pair<iterator, bool>(iterator(x), false));
 		}
 
-		template <typename InputIterator>
-		void insert(InputIterator first, InputIterator last,
-					typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
+		virtual void erase(iterator it)
 		{
-			while (first != last) {
-				insert(*first);
-				first++;
-			}
-		}
-
-		void erase(node* x) {
+			node* x = it._ptr;
 			if (x == NULL || x == this->_first || x == this->_last)
 				return;
 
@@ -418,7 +391,7 @@ namespace ft
 			this->_size--;
 		}
 
-		node* find(const value_type& data) const
+		iterator find(const value_type& data)
 		{
 			node* item = this->_root;
 			while (item != NULL && item != this->_first && item != this->_last) {
@@ -427,9 +400,23 @@ namespace ft
 				else if (this->_cmp(item->_data, data))
 					item = item->_right;
 				else
-					return (item);
+					return (iterator(item));
 			}
-			return (this->_last);
+			return (end());
+		}
+
+		const_iterator find(const value_type& data) const
+		{
+			node* item = this->_root;
+			while (item != NULL && item != this->_first && item != this->_last) {
+				if (this->_cmp(data, item->_data))
+					item = item->_left;
+				else if (this->_cmp(item->_data, data))
+					item = item->_right;
+				else
+					return (const_iterator(item));
+			}
+			return (end());
 		}
 
 		size_type count(const value_type& data) const
@@ -457,8 +444,8 @@ namespace ft
 			traversal(this->_root);
 		}
 
-		void print()
-		{ print(this->_root, 10); }
+		Tree& getTree()
+		{ return (*this); }
 	};
 
 }

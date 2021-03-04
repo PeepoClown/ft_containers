@@ -16,6 +16,9 @@ namespace ft
 		template <typename K, typename Compare, bool isMulti>
 		friend class Tree;
 
+		template <typename Key, typename K, typename Compare, typename Alloc>
+		friend class map;
+
 		template <typename K>
 		friend class TreeIterator;
 		template <typename K>

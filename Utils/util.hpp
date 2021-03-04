@@ -70,6 +70,29 @@ namespace ft
 	template <typename T>
 	struct enable_if <true, T> { typedef T type; };
 
+	template <typename T, typename Compare>
+	class value_compare
+	{
+	public :
+		typedef T		value_type;
+		typedef Compare	key_compare;
+	private:
+		template <typename Key, typename K, typename Comp, typename Alloc>
+		friend class map;
+
+		key_compare _cmp;
+
+	public:
+		explicit value_compare(const key_compare& cmp)
+				: _cmp(cmp)
+		{ }
+		value_compare(const value_compare& cmp)
+				: _cmp(cmp._cmp)
+		{ }
+		bool operator() (const value_type& x, const value_type& y) const
+		{ return (this->_cmp(x.first, y.first)); }
+	};
+
 }
 
 #endif

@@ -1,49 +1,43 @@
-#include "Utils/RBTree.hpp"
+#include "Map/Map.hpp"
+#include <map>
 #include <iostream>
-
-typedef ft::Tree<int, std::less<int>, true> rbTree;
 
 int 	main()
 {
-	rbTree tree;
-	for (size_t i = 0; i < 10; i++)
-		tree.insert(i);
+	ft::map<int, std::string> m;
 
-	tree.insert(15);
-	tree.insert(20);
-	tree.insert(25);
+	m[0] = "0";
+	m[2] = "2";
+	m[1] = "1";
+	m[3] = "3";
+	m[2] = "555";
+	m[5] = "5";
 
-	std::cout << "iterating: ";
-	for (rbTree::reverse_iterator it = tree.rbegin(); it != tree.rend(); it++) {
-		std::cout << *it << " ";
+	std::pair<ft::map<int, std::string>::iterator, bool> t1 = m.insert(std::pair<int, std::string>(25, "zxc"));
+	std::pair<ft::map<int, std::string>::iterator, bool> t2 = m.insert(std::pair<int, std::string>(5, "zxc"));
+
+	std::cout << "fst: " << t1.second << " scd: " << t2.second << std::endl;
+
+	std::cout << m.erase(3) << std::endl;
+
+	std::cout << "find 5 : " << m.find(5)->first << " " << m.find(5)->second << std::endl;
+	std::cout << "find 3 : " << m.find(3)->first << " " << m.find(3)->second << std::endl;
+
+	for (ft::map<int, std::string>::iterator it = m.begin(); it != m.end(); it++) {
+		std::cout << it->first << " " << it->second << std::endl;
 	}
-	std::cout << std::endl;
 
-	tree.traversal();
+	std::cout << m.size() << " " << m.empty() << " " << m.max_size() << std::endl;
 
-	tree.print();
+	std::map<int, std::string> m1;
 
-	tree.print();
+	std::cout << m1.size() << " " << m1.empty() << " " << m1.max_size() << std::endl;
 
-	tree.erase(tree.find(0));
-	tree.erase(tree.find(1));
-	tree.erase(tree.find(2));
-	tree.erase(tree.find(3));
-	tree.erase(tree.find(4));
+	const ft::map<int, std::string> m2(m);
 
-	tree.print();
+	std::cout << "find 5 : " << m2.find(5)->first << " " << m2.find(5)->second << std::endl;
+	std::cout << "find 3 : " << m2.find(3)->first << " " << m2.find(3)->second << std::endl;
 
-	tree.erase(tree.find(5));
-	tree.erase(tree.find(6));
-	tree.erase(tree.find(7));
+	std::cout << m2.count(11);
 
-	tree.print();
-
-	tree.erase(tree.find(8));
-
-	tree.print();
-
-	tree.erase(tree.find(9));
-
-	tree.print();
 }
