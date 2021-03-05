@@ -14,6 +14,9 @@ namespace ft
 		template <typename K, typename Compare, bool isMulti>
 		friend class Tree;
 
+		template <typename K>
+		friend class TreeConstIterator;
+
 		typedef T						value_type;
 		typedef TreeNode<value_type>	node;
 		typedef value_type&				reference;
@@ -125,6 +128,9 @@ namespace ft
 	public :
 		template <typename K, typename Compare, bool isMulti>
 		friend class Tree;
+
+		template <typename K>
+		friend class TreeConstReverseIterator;
 
 		typedef T						value_type;
 		typedef TreeNode<value_type>	node;
@@ -246,10 +252,10 @@ namespace ft
 		explicit TreeConstIterator(node* ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		TreeConstIterator(const TreeConstIterator& it)
+		TreeConstIterator(const TreeIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		TreeConstIterator& operator= (const TreeConstIterator& it)
+		TreeConstIterator& operator= (const TreeIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
@@ -280,10 +286,10 @@ namespace ft
 		explicit TreeConstReverseIterator(node* ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		TreeConstReverseIterator(const TreeConstReverseIterator& it)
+		TreeConstReverseIterator(const TreeReverseIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		TreeConstReverseIterator& operator= (const TreeConstReverseIterator& it)
+		TreeConstReverseIterator& operator= (const TreeReverseIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);

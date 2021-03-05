@@ -1,5 +1,5 @@
-#ifndef SET_HPP
-#define SET_HPP
+#ifndef MULTISET_HPP
+#define MULTISET_HPP
 
 #include <memory>
 #include <cstddef>
@@ -11,49 +11,49 @@ namespace ft
 {
 
 	template <typename T, typename Compare = std::less<T>,
-			  typename Alloc = std::allocator<T> >
-	class set : public Tree<T, Compare, false>
+			typename Alloc = std::allocator<T> >
+	class multiset : public Tree<T, Compare, true>
 	{
 	public :
-		typedef T																		key_type;
-		typedef T																		value_type;
-		typedef Compare																	key_compare;
-		typedef Compare																	value_compare;
-		typedef Alloc																	allocator_type;
-		typedef value_type&						 										reference;
-		typedef const value_type&														const_reference;
-		typedef value_type*																pointer;
-		typedef const value_type*														const_pointer;
-		typedef typename Tree<value_type, key_compare, false>::iterator					iterator;
-		typedef typename Tree<value_type, key_compare, false>::reverse_iterator			reverse_iterator;
-		typedef typename Tree<value_type, key_compare, false>::const_iterator			const_iterator;
-		typedef typename Tree<value_type, key_compare, false>::const_reverse_iterator	const_reverse_iterator;
-		typedef ptrdiff_t																difference_type;
-		typedef size_t																	size_type;
-		typedef Tree<value_type, key_compare, false>									tree;
-		typedef TreeNode<value_type>													node;
+		typedef T																			key_type;
+		typedef T																			value_type;
+		typedef Compare																		key_compare;
+		typedef Compare																		value_compare;
+		typedef Alloc																		allocator_type;
+		typedef value_type&						 											reference;
+		typedef const value_type&															const_reference;
+		typedef value_type*																	pointer;
+		typedef const value_type*															const_pointer;
+		typedef typename Tree<value_type, key_compare, true>::iterator						iterator;
+		typedef typename Tree<value_type, key_compare, true>::reverse_iterator				reverse_iterator;
+		typedef typename Tree<value_type, key_compare, true>::const_iterator				const_iterator;
+		typedef typename Tree<value_type, key_compare, true>::const_reverse_iterator		const_reverse_iterator;
+		typedef ptrdiff_t																	difference_type;
+		typedef size_t																		size_type;
+		typedef Tree<value_type, key_compare, true>											tree;
+		typedef TreeNode<value_type>														node;
 
 	private :
 		key_compare		_cmp;
 		allocator_type	_alloc;
 
 	public :
-		explicit set(const key_compare& cmp = key_compare(),
-					 const allocator_type& alloc = allocator_type())
+		explicit multiset(const key_compare& cmp = key_compare(),
+					 	  const allocator_type& alloc = allocator_type())
 			: tree(cmp), _cmp(cmp), _alloc(alloc)
 		{ }
 
 		template <typename InputIterator>
-		set(InputIterator first, InputIterator last, const key_compare& cmp = key_compare(),
-			const allocator_type& alloc = allocator_type())
+		multiset(InputIterator first, InputIterator last, const key_compare& cmp = key_compare(),
+				 const allocator_type& alloc = allocator_type())
 			: tree(cmp), _cmp(cmp), _alloc(alloc)
 		{ this->insert(first, last); }
 
-		set(const set& x)
+		multiset(const multiset& x)
 			: tree(x._cmp), _cmp(x._cmp), _alloc(x._alloc)
 		{ this->insert(x.begin(), x.end()); }
 
-		set& operator= (const set& x)
+		multiset& operator= (const multiset& x)
 		{
 			this->_cmp = x._cmp;
 			tree::clear();
@@ -61,7 +61,7 @@ namespace ft
 			return (*this);
 		}
 
-		virtual ~set()
+		virtual ~multiset()
 		{ }
 
 		bool empty() const
@@ -70,8 +70,8 @@ namespace ft
 		size_type max_size() const
 		{ return(std::numeric_limits<size_type>::max() / sizeof(node)); }
 
-		std::pair<iterator, bool> insert(const value_type& val)
-		{ return (tree::insert(val)); }
+		iterator insert(const value_type& val)
+		{ return (tree::insert(val).first); }
 
 		iterator insert(iterator position, const value_type& val)
 		{
@@ -95,8 +95,11 @@ namespace ft
 		size_type erase(const value_type& val)
 		{
 			size_type result = tree::count(val);
-			if (result == 1)
+			size_type i = result;
+			while (i > 0) {
 				tree::erase(tree::find(val));
+				i--;
+			}
 			return (result);
 		}
 
@@ -111,7 +114,7 @@ namespace ft
 			}
 		}
 
-		void swap(set& x)
+		void swap(multiset& x)
 		{
 			tree::swap(x.getTree());
 			ft::swap(this->_cmp, x._cmp);

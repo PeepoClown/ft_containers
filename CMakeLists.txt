@@ -8,4 +8,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 include_directories(.)
 include_directories(Utils)
 
-add_executable(containers Multimap/Multimap.hpp multimapTest.cpp)
+add_executable(containers Multiset/Multiset.hpp srcs/multisetTest.cpp)

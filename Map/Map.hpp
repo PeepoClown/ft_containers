@@ -4,8 +4,8 @@
 #include <memory>
 #include <cstddef>
 #include <limits>
-#include "../Utils/util.hpp"
-#include "../Utils/RBTree.hpp"
+#include "util.hpp"
+#include "RBTree.hpp"
 
 namespace ft
 {
@@ -31,7 +31,7 @@ namespace ft
 		typedef typename Tree<value_type, value_compare, false>::const_reverse_iterator		const_reverse_iterator;
 		typedef ptrdiff_t																	difference_type;
 		typedef size_t																		size_type;
-		typedef Tree<std::pair<const Key, T>, value_compare, false>							tree;
+		typedef Tree<value_type, value_compare, false>										tree;
 		typedef TreeNode<value_type>														node;
 
 		private :
@@ -162,6 +162,7 @@ namespace ft
 			}
 			return (tree::end());
 		}
+
 		const_iterator lower_bound(const key_type& key) const
 		{
 			for (const_iterator it = tree::begin(); it != tree::end(); it++) {
@@ -179,6 +180,7 @@ namespace ft
 			}
 			return (tree::end());
 		}
+
 		const_iterator upper_bound(const key_type& key) const
 		{
 			for (const_iterator it = tree::begin(); it != tree::end(); it++) {

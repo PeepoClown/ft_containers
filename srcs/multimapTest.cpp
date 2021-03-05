@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <map>
-#include "Multimap/Multimap.hpp"
+#include "../Multimap/Multimap.hpp"
 
 void print_std_map(std::multimap<std::string, int>& map)
 {
@@ -22,8 +22,11 @@ void print_ft_map(ft::multimap<std::string, int>& map)
 	std::cout << std::endl;
 }
 
-int 	main()
+void	multimapTest()
 {
+	getchar();
+	system("clear");
+
 	{
 		std::cout << "empty multimap test" << std::endl;
 		std::multimap<std::string, int> std_map;
@@ -143,8 +146,8 @@ int 	main()
 		for (ft::multimap<std::string, int>::reverse_iterator it = ft_map.rbegin(); it != ft_map.rend(); it++)
 			std::cout << it->first << " => " << it->second << std::endl;
 
-		const std::multimap<std::string, int> std_map_const(std_map);
-		const ft::multimap<std::string, int> ft_map_const(ft_map);
+		std::multimap<std::string, int> std_map_const(std_map);
+		ft::multimap<std::string, int> ft_map_const(ft_map);
 
 		std::cout << "const iterator: " << std::endl;
 		std::cout << "[std]: " << std::endl;
@@ -549,5 +552,7 @@ int 	main()
 					⢸⠀⠀⠀⠀⢠⠃⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⢸\n\
 					⢸⠀⠀⠀⠀⢸⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⢸\n\n\n";
 
-	return (0);
+	getchar();
+	system("clear");
+
 }

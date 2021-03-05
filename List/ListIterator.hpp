@@ -2,7 +2,7 @@
 #define LISTITERATOR_HPP
 
 #include <cstddef>
-#include "List/ListNode.hpp"
+#include "ListNode.hpp"
 
 namespace ft
 {
