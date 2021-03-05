@@ -123,7 +123,8 @@ namespace ft
 			if (n <= this->_size) {
 				for (size_type i = n; i < this->_size; i++)
 					this->_alloc.destroy(this->_data + i);
-			} else {
+			}
+			else {
 				if (n > this->_capacity)
 					reserve(ft::max(n, this->_capacity * 2));
 				for (size_type i = this->_size; i < n; i++)
@@ -307,7 +308,7 @@ namespace ft
 				return (end());
 			for (size_type i = pos; i < pos + n + 1; i++) {
 				this->_alloc.destroy(this->_data + i);
-				this->_alloc.construct(this->_data + i, this->_data[i + n]);
+				this->_alloc.construct(this->_data + i, this->_data[i + pos]);
 			}
 			this->_size -= n;
 			return (iterator(this->_data + pos));

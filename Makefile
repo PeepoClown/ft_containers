@@ -4,7 +4,8 @@ CXXFLAGS = -MMD -Wall -Wextra -Werror -std=c++98 -I Utils/
 
 SRCDIR = srcs/
 OBJDIR = objs/
-OBJS = mapTest.o \
+OBJS = vectorTest.o \
+	   mapTest.o \
 	   multimapTest.o \
 	   setTest.o \
 	   multisetTest.o \
@@ -14,7 +15,7 @@ OBJ = $(addprefix $(OBJDIR),$(OBJS))
 
 .PHONY: all
 all: $(OBJDIR) $(NAME)
-	@printf "\e[1;34mContainers built\e[0m\n"
+	@printf "\e[1;38;5;180mContainers built\e[0m\n"
 
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJ)
@@ -29,7 +30,7 @@ $(OBJDIR):
 .PHONY: clean
 clean:
 	rm -rf $(OBJDIR)
-	@printf "\e[1;33mCLEAN\e[0m\n"
+	@printf "\e[1;38;5;208mCLEAN\e[0m\n"
 
 .PHONY: fclean
 fclean: clean

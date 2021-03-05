@@ -12,6 +12,7 @@
 // deque
 
 // tests
+void vectorTest();
 // ..
 void mapTest();
 void multimapTest();

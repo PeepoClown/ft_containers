@@ -9,6 +9,9 @@ namespace ft
 	class VectorIterator
 	{
 	public :
+		template <typename K>
+		friend class VectorConstIterator;
+
 		typedef T				value_type;
 		typedef value_type*		pointer;
 		typedef value_type&		reference;
@@ -109,6 +112,9 @@ namespace ft
 	class VectorReverseIterator
 	{
 	public :
+		template <typename K>
+		friend class VectorConstReverseIterator;
+
 		typedef T				value_type;
 		typedef value_type*		pointer;
 		typedef value_type&		reference;
@@ -217,10 +223,10 @@ namespace ft
 		explicit VectorConstIterator(pointer ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		VectorConstIterator(const VectorConstIterator& it)
+		VectorConstIterator(const VectorIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		VectorConstIterator& operator= (const VectorConstIterator& it)
+		VectorConstIterator& operator= (const VectorIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
@@ -251,10 +257,10 @@ namespace ft
 		explicit VectorConstReverseIterator(pointer ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		VectorConstReverseIterator(const VectorConstReverseIterator& it)
+		VectorConstReverseIterator(const VectorReverseIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		VectorConstReverseIterator& operator= (const VectorConstReverseIterator& it)
+		VectorConstReverseIterator& operator= (const VectorReverseIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
