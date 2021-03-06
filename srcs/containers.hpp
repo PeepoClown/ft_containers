@@ -13,7 +13,8 @@
 
 // tests
 void vectorTest();
-// ..
+void listTest();
+// ...
 void mapTest();
 void multimapTest();
 void setTest();

@@ -8,6 +8,9 @@
 #include "ListNode.hpp"
 #include "ListIterator.hpp"
 
+#include <iostream>
+
+
 namespace ft
 {
 
@@ -15,19 +18,19 @@ namespace ft
 	class list
 	{
 	public :
-		typedef T								value_type;
-		typedef ListNode<value_type>			node;
-		typedef Alloc							allocator_type;
-		typedef value_type&						reference;
-		typedef const value_type&				const_reference;
-		typedef value_type*						pointer;
-		typedef const value_type*				const_pointer;
-		typedef ListIterator<T>					iterator;
-		typedef ListReverseIterator<T>			reverse_iterator;
-		typedef ListConstIterator<T>			const_iterator;
-		typedef ListConstReverseIterator<T>		const_reverse_iterator;
-		typedef ptrdiff_t						difference_type;
-		typedef size_t							size_type;
+		typedef T										value_type;
+		typedef Alloc									allocator_type;
+		typedef value_type&								reference;
+		typedef const value_type&						const_reference;
+		typedef value_type*								pointer;
+		typedef const value_type*						const_pointer;
+		typedef ListIterator<value_type>				iterator;
+		typedef ListReverseIterator<value_type>			reverse_iterator;
+		typedef ListConstIterator<value_type>			const_iterator;
+		typedef ListConstReverseIterator<value_type>	const_reverse_iterator;
+		typedef ptrdiff_t								difference_type;
+		typedef size_t									size_type;
+		typedef ListNode<value_type>					node;
 
 	private :
 		node*			_head;
@@ -88,11 +91,65 @@ namespace ft
 			slow->_next = end()._ptr;
 		}
 
+
+
+
+		node* split(node* head)
+		{
+			node* fast = head;
+			node* slow = head;
+			while (fast->_next != end()._ptr && fast->_next->_next != end()._ptr) {
+				fast = fast->_next->_next;
+				slow = slow->_next;
+			}
+			node* tmp = slow->_next;
+			slow->_next = end()._ptr;
+			return (tmp);
+		}
+
+		node* merge(node* first, node* second)
+		{
+			if (first == end()._ptr)
+				return (second);
+			if (second == end()._ptr)
+				return (first);
+
+			if (first->_data < second->_data)
+			{
+				first->_next = merge(first->_next, second);
+				first->_next->_prev = first;
+				first->_prev = end()._ptr;
+				return (first);
+			}
+			else
+			{
+				second->_next = merge(first, second->_next);
+				second->_next->_prev = second;
+				second->_prev = end()._ptr;
+				return (second);
+			}
+		}
+
+		node* mergeSort(node* head)
+		{
+			if (head == end()._ptr || head->_next == end()._ptr)
+				return (head);
+			node* second = split(head);
+
+			head = mergeSort(head);
+			second = mergeSort(second);
+
+			return (merge(head, second));
+		}
+
+
+
+
+
+
+
+
 	public :
-		/*
-		** default constructor
-		** constructs an empty list
-		*/
 		explicit list(const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), _size(0)
 		{
@@ -102,10 +159,6 @@ namespace ft
 			this->_tail->_prev = this->_head;
 		}
 
-		/*
-		** fill constructor
-		** fill list by n elements, equals to val
-		*/
 		explicit list(size_type n, const value_type& val = value_type(),
 				      const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), _size(0)
@@ -117,10 +170,6 @@ namespace ft
 			assign(n, val);
 		}
 
-		/*
-		** range constructor
-		** fill list by range of iterator [first, last)
-		*/
 		template <typename InputIterator>
 		list(InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
 			 typename enable_if<!std::numeric_limits<InputIterator>::is_specialized>::type * = 0)
@@ -133,10 +182,6 @@ namespace ft
 			assign(first, last);
 		}
 
-		/*
-		** copy constructor
-		** fill list by elements of list passed to param
-		*/
 		list(const list& x)
 			: _alloc(x._alloc), _size(0)
 		{
@@ -147,10 +192,6 @@ namespace ft
 			assign(x.begin(), x.end());
 		}
 
-		/*
-		** assignation operator overload
-		** same as copy constructor but returns list
-		*/
 		list& operator= (const list& x)
 		{
 			clear();
@@ -164,10 +205,6 @@ namespace ft
 			return (*this);
 		}
 
-		/*
-		** destructor
-		** delete list and its elements
-		*/
 		~list()
 		{
 			clear();
@@ -175,10 +212,6 @@ namespace ft
 			delete this->_tail;
 		}
 
-		/*
-		** iterators access methods
-		** returns an iterator to begin/end of list
-		*/
 		iterator begin()
 		{ return (iterator(this->_head->_next)); }
 
@@ -203,41 +236,21 @@ namespace ft
 		const_reverse_iterator rend() const
 		{ return (const_reverse_iterator(this->_head)); }
 
-		/*
-		** empty
-		** returns true if list is empty, otherwise false
-		*/
 		bool empty() const
 		{ return (!this->_size); }
 
-		/*
-		** size
-		** returns list size
-		*/
 		size_type size() const
 		{ return (this->_size); }
 
-		/*
-		** max_size
-		** returns max size of elements that list can store
-		*/
 		size_type max_size() const
 		{ return (std::numeric_limits<size_type>::max() / sizeof(node)); }
 
-		/*
-		** front in 2 versions
-		** returns value that stored in first list item
-		*/
 		reference front()
 		{ return (this->_head->_next->_data); }
 
 		const_reference front() const
 		{ return (this->_head->_next->_data); }
 
-		/*
-		** back in 2 versions
-		** returns value that stored in last list item
-		*/
 		reference back()
 		{ return (this->_tail->_prev->_data); }
 
@@ -367,6 +380,7 @@ namespace ft
 
 		void splice(iterator position, list& x, iterator first, iterator last)
 		{
+			size_type dist = ft::distance(first, last);
 			node* first_elem = first._ptr;
 			node* last_elem = last._ptr->_prev;
 			node* last_elem_next = last._ptr;
@@ -379,8 +393,8 @@ namespace ft
 			position_elem->_prev = last_elem;
 			last_elem->_next = position_elem;
 
-			this->_size += ft::distance(first, last);
-			x._size -= ft::distance(first, last);
+			this->_size += dist;
+			x._size -= dist;
 		}
 
 		void splice(iterator position, list& x)
@@ -419,10 +433,6 @@ namespace ft
 			}
 		}
 
-		/*
-		** unique in 2 version
-		** remove sequence of elements equal or predictable, leaving only first of them
-		*/
 		void unique()
 		{
 			node* curr = this->_head->_next;
@@ -501,7 +511,7 @@ namespace ft
 
 		void sort()
 		{
-			MergeSort(&this->_head->_next, (ft::Less<T>()));
+			MergeSort(&this->_head->_next, ft::Less<T>());
 			node* prev = this->_head;
 			node* tmp = begin()._ptr;
 			while (tmp != end()._ptr) {
@@ -526,10 +536,6 @@ namespace ft
 			this->_tail->_prev = prev;
 		}
 
-		/*
-		** reverse
-		** reverse all list elements
-		*/
 		void reverse()
 		{
 			node* curr = this->_head->_next;
@@ -544,9 +550,6 @@ namespace ft
 		}
 	};
 
-	/*
-	** compare operators overload
-	*/
 	template <class T, class Alloc>
 	bool operator== (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{
@@ -566,17 +569,17 @@ namespace ft
 
 	template <class T, class Alloc>
 	bool operator< (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
-	{
-		size_t min_size = ft::min(lhs.size(), rhs.size());
-		typename list<T>::iterator it_lhs = lhs.begin(), it_rhs = rhs.begin();
-		for (size_t i = 0; i < min_size; i++, it_lhs++, it_rhs++) {
-			if (*it_lhs < *it_rhs)
-				return (true);
-			else if (*it_lhs > *it_rhs)
-				return (false);
-		}
-		return (lhs.size() < rhs.size());
-	}
+	{ return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+//		size_t min_size = ft::min(lhs.size(), rhs.size());
+//		typename list<T>::iterator it_lhs = lhs.begin(), it_rhs = rhs.begin();
+//		for (size_t i = 0; i < min_size; i++, it_lhs++, it_rhs++) {
+//			if (*it_lhs < *it_rhs)
+//				return (true);
+//			else if (*it_lhs > *it_rhs)
+//				return (false);
+//		}
+//		return (lhs.size() < rhs.size());
+//	}
 
 	template <class T, class Alloc>
 	bool operator> (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
@@ -590,10 +593,6 @@ namespace ft
 	bool operator>= (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{ return (!(lhs < rhs)); }
 
-	/*
-	** swap
-	** identical to list::swap
-	*/
 	template <class T, class Alloc>
 	void swap(list<T, Alloc>& x, list<T, Alloc>& y)
 	{ x.swap(y); }

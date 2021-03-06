@@ -8,4 +8,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 include_directories(.)
 include_directories(Utils)
 
-add_executable(containers Vector/VectorIterator.hpp Vector/Vector.hpp srcs/vectorTest.cpp srcs/main.cpp)
+add_executable(containers srcs/listTest.cpp srcs/main.cpp)

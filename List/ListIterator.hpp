@@ -14,6 +14,9 @@ namespace ft
 		template <typename K, typename Alloc>
 		friend class list;
 
+		template <typename K>
+		friend class ListConstIterator;
+
 		typedef T						value_type;
 		typedef value_type*				pointer;
 		typedef value_type&				reference;
@@ -85,6 +88,9 @@ namespace ft
 	public :
 		template <typename K, typename Alloc>
 		friend class list;
+
+		template <typename K>
+		friend class ListConstReverseIterator;
 
 		typedef T						value_type;
 		typedef value_type*				pointer;
@@ -166,10 +172,10 @@ namespace ft
 		explicit ListConstIterator(node* ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		ListConstIterator(const ListConstIterator& it)
+		ListConstIterator(const ListIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		ListConstIterator& operator= (const ListConstIterator& it)
+		ListConstIterator& operator= (const ListIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);
@@ -200,10 +206,10 @@ namespace ft
 		explicit ListConstReverseIterator(node* ptr = NULL)
 		{ this->_ptr = ptr; }
 
-		ListConstReverseIterator(const ListConstReverseIterator& it)
+		ListConstReverseIterator(const ListReverseIterator<T>& it)
 		{ this->_ptr = it._ptr; }
 
-		ListConstReverseIterator& operator= (const ListConstReverseIterator& it)
+		ListConstReverseIterator& operator= (const ListReverseIterator<T>& it)
 		{
 			this->_ptr = it._ptr;
 			return (*this);

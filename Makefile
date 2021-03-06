@@ -5,6 +5,7 @@ CXXFLAGS = -MMD -Wall -Wextra -Werror -std=c++98 -I Utils/
 SRCDIR = srcs/
 OBJDIR = objs/
 OBJS = vectorTest.o \
+	   listTest.o \
 	   mapTest.o \
 	   multimapTest.o \
 	   setTest.o \
