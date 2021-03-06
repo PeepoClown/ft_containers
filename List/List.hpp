@@ -91,64 +91,6 @@ namespace ft
 			slow->_next = end()._ptr;
 		}
 
-
-
-
-		node* split(node* head)
-		{
-			node* fast = head;
-			node* slow = head;
-			while (fast->_next != end()._ptr && fast->_next->_next != end()._ptr) {
-				fast = fast->_next->_next;
-				slow = slow->_next;
-			}
-			node* tmp = slow->_next;
-			slow->_next = end()._ptr;
-			return (tmp);
-		}
-
-		node* merge(node* first, node* second)
-		{
-			if (first == end()._ptr)
-				return (second);
-			if (second == end()._ptr)
-				return (first);
-
-			if (first->_data < second->_data)
-			{
-				first->_next = merge(first->_next, second);
-				first->_next->_prev = first;
-				first->_prev = end()._ptr;
-				return (first);
-			}
-			else
-			{
-				second->_next = merge(first, second->_next);
-				second->_next->_prev = second;
-				second->_prev = end()._ptr;
-				return (second);
-			}
-		}
-
-		node* mergeSort(node* head)
-		{
-			if (head == end()._ptr || head->_next == end()._ptr)
-				return (head);
-			node* second = split(head);
-
-			head = mergeSort(head);
-			second = mergeSort(second);
-
-			return (merge(head, second));
-		}
-
-
-
-
-
-
-
-
 	public :
 		explicit list(const allocator_type& alloc = allocator_type())
 			: _alloc(alloc), _size(0)
