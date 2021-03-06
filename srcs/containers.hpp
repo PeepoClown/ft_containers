@@ -3,8 +3,8 @@
 
 #include "../Vector/Vector.hpp"
 #include "../List/List.hpp"
-// stack
-// queue
+#include "../Stack/Stack.hpp"
+#include "../Queue/Queue.hpp"
 #include "../Map/Map.hpp"
 #include "../Multimap/Multimap.hpp"
 #include "../Set/Set.hpp"
@@ -14,7 +14,8 @@
 // tests
 void vectorTest();
 void listTest();
-// ...
+void stackTest();
+void queueTest();
 void mapTest();
 void multimapTest();
 void setTest();

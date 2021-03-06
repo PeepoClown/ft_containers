@@ -6,11 +6,11 @@ int		main()
 	std::cout << "\e[1;38;5;218m                          VECTOR TEST\e[0m" << std::endl;
 	// vectorTest();
 	std::cout << "\e[1;38;5;214m                          LIST TEST\e[0m" << std::endl;
-	listTest();
+	// listTest();
 	std::cout << "\e[1;38;5;151m                          STACK TEST\e[0m" << std::endl;
-	// stackTest(); ???
+	// stackTest();
 	std::cout << "\e[1;38;5;197m                          QUEUE TEST\e[0m" << std::endl;
-	// queueTest() ???
+	// queueTest();
 	std::cout << "\e[1;38;5;154m                          MAP TEST\e[0m" << std::endl;
 	// mapTest();
 	std::cout << "\e[1;38;5;226m                          MULTIMAP TEST\e[0m" << std::endl;

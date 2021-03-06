@@ -6,6 +6,8 @@ SRCDIR = srcs/
 OBJDIR = objs/
 OBJS = vectorTest.o \
 	   listTest.o \
+	   stackTest.o \
+	   queueTest.o \
 	   mapTest.o \
 	   multimapTest.o \
 	   setTest.o \
