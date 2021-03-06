@@ -39,56 +39,56 @@ namespace ft
 		size_type		_size;
 
 		template <typename Compare>
-		void MergeSort(node** headRef, Compare comp)
+		void mergeSort(node** headRef, Compare comp)
 		{
 			node* head = *headRef;
-			node* a = end()._ptr;
-			node* b = end()._ptr;
+			node* a = this->_tail;
+			node* b = this->_tail;
 
-			if (head == end()._ptr || head->_next == end()._ptr)
+			if (head == this->_tail || head->_next == this->_tail)
 				return ;
 			
-			FrontBackSplit(head, &a, &b);
-			MergeSort(&a, comp);
-			MergeSort(&b, comp);
-			*headRef = SortedMerge(a, b, comp);
+			frontBackSplit(head, &a, &b);
+			mergeSort(&a, comp);
+			mergeSort(&b, comp);
+			*headRef = sortedMerge(a, b, comp);
 		}
 
 		template <typename Compare>
-		node* SortedMerge(node* a, node* b, Compare comp)
+		node* sortedMerge(node* a, node* b, Compare comp)
 		{
 			node* result;
 
-			if (a == end()._ptr)
+			if (a == this->_tail)
 				return (b);
-			if (b == end()._ptr)
+			if (b == this->_tail)
 				return (a);
 
 			if (comp(a->_data, b->_data)) {
 				result = a;
-				result->_next = SortedMerge(a->_next, b, comp);
+				result->_next = sortedMerge(a->_next, b, comp);
 			}
 			else {
 				result = b;
-				result->_next = SortedMerge(a, b->_next, comp);
+				result->_next = sortedMerge(a, b->_next, comp);
 			}
 			return (result);
 		}
 
-		void FrontBackSplit(node* source, node** frontRef, node** backRef)
+		void frontBackSplit(node* source, node** frontRef, node** backRef)
 		{
 			node* fast = source;
 			node* slow = source;
-			while (fast != end()._ptr) {
+			while (fast != this->_tail) {
 				fast = fast->_next;
-				if (fast != end()._ptr && fast->_next != end()._ptr) {
+				if (fast != this->_tail && fast->_next != this->_tail) {
 					slow = slow->_next;
 					fast = fast->_next;
 				}
 			}
 			*frontRef = source;
 			*backRef = slow->_next;
-			slow->_next = end()._ptr;
+			slow->_next = this->_tail;
 		}
 
 	public :
@@ -453,7 +453,7 @@ namespace ft
 
 		void sort()
 		{
-			MergeSort(&this->_head->_next, ft::Less<T>());
+			mergeSort(&this->_head->_next, ft::Less<T>());
 			node* prev = this->_head;
 			node* tmp = begin()._ptr;
 			while (tmp != end()._ptr) {
@@ -467,7 +467,7 @@ namespace ft
 		template <typename Compare>
 		void sort(Compare comp)
 		{
-			MergeSort(&this->_head->_next, comp);
+			mergeSort(&this->_head->_next, comp);
 			node* prev = this->_head;
 			node* tmp = begin()._ptr;
 			while (tmp != end()._ptr) {
@@ -512,16 +512,6 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator< (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)
 	{ return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
-//		size_t min_size = ft::min(lhs.size(), rhs.size());
-//		typename list<T>::iterator it_lhs = lhs.begin(), it_rhs = rhs.begin();
-//		for (size_t i = 0; i < min_size; i++, it_lhs++, it_rhs++) {
-//			if (*it_lhs < *it_rhs)
-//				return (true);
-//			else if (*it_lhs > *it_rhs)
-//				return (false);
-//		}
-//		return (lhs.size() < rhs.size());
-//	}
 
 	template <class T, class Alloc>
 	bool operator> (const list<T, Alloc>& lhs, const list<T, Alloc>& rhs)

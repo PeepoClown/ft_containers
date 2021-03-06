@@ -531,7 +531,7 @@ void	listTest()
 		std::cout << "sort test" << std::endl;
 		std::list<int> std_list;
 		ft::list<int> ft_list;
-		for (size_t i = 0; i < 30; i++) {
+		for (size_t i = 0; i < 100; i++) {
 			int val = rand() % 200 - 100;
 			std_list.push_back(val);
 			ft_list.push_back(val);
