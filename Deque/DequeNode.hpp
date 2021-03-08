@@ -57,8 +57,14 @@ namespace ft
 		bool empty() const
 		{ return (!this->_size); }
 
-		bool isFull() const
+		bool isFull()
 		{ return (this->_size >= DEQUE_NODE_SIZE); }
+
+		reference front()
+		{ return (this->_data[0]); }
+
+		reference back()
+		{ return (this->_data[this->_size - 1]); }
 		                                    
 		void push(const value_type& val)
 		{
@@ -72,7 +78,6 @@ namespace ft
 		{
 			if (empty())
 				return ;
-			delete this->_data[this->_size];
 			this->_size--;
 		}
 

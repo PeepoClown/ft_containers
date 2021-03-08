@@ -12,6 +12,7 @@ OBJS = vectorTest.o \
 	   multimapTest.o \
 	   setTest.o \
 	   multisetTest.o \
+	   dequeTest.o \
 	   main.o
 
 OBJ = $(addprefix $(OBJDIR),$(OBJS))

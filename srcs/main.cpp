@@ -20,6 +20,6 @@ int		main()
 	std::cout << "\e[1;38;5;105m                          MULTISET TEST\e[0m" << std::endl;
 	// multisetTest();
 	std::cout << "\e[1;38;5;195m                          DEQUE TEST\e[0m" << std::endl;
-	// dequeTest(); ???
+	dequeTest();
 	return (0);
 }

@@ -9,7 +9,7 @@
 #include "../Multimap/Multimap.hpp"
 #include "../Set/Set.hpp"
 #include "../Multiset/Multiset.hpp"
-// deque
+#include "../Deque/Deque.hpp"
 
 // tests
 void vectorTest();
@@ -20,6 +20,6 @@ void mapTest();
 void multimapTest();
 void setTest();
 void multisetTest();
-// ...
+void dequeTest();
 
 #endif
