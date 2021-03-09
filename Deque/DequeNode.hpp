@@ -3,52 +3,62 @@
 
 #include <cstddef>
 
-#define DEQUE_NODE_SIZE 8
-
 namespace ft
 {
 
-	template <typename T>
+	template <typename T, typename Alloc>
 	class DequeNode
 	{
 	public :
-		typedef T               value_type;
-		typedef value_type&     reference;
-		typedef value_type*     pointer;
-		typedef size_t          size_type;
+		typedef T                                   value_type;
+		typedef Alloc                               allocator_type;
+		typedef typename allocator_type::reference  reference;
+		typedef typename allocator_type::pointer    pointer;
+		typedef size_t                              size_type;
 
 	private :
-		pointer     _data;
-		size_type   _size;
+		pointer                 _data;
+		size_type               _size;
+		allocator_type          _alloc;
+		static const size_type  _nodeSize = 8;
 
 	public :
-		explicit DequeNode(size_type size = 0)
-			: _size(size)
-		{ this->_data = new value_type[DEQUE_NODE_SIZE]; }
+		explicit DequeNode(const allocator_type& alloc = allocator_type())
+			: _data(NULL), _size(0), _alloc(alloc)
+		{ this->_data = this->_alloc.allocate(this->_nodeSize); }
 
 		DequeNode(const DequeNode& x)
-			: _size(x._size)
+			: _data(NULL), _size(x._size), _alloc(x._alloc)
 		{
-			this->_data = new value_type[DEQUE_NODE_SIZE];
+			this->_data = this->_alloc.allocate(this->_nodeSize);
 			for (size_type i = 0; i < this->_size; i++)
-				this->_data[i] = x._data[i];
+				this->_alloc.construct(this->_data + i, x._data[i]);
 		}
 
 		DequeNode& operator= (const DequeNode& x)
 		{
+			clear();
 			if (this->_data != NULL)
-				delete[] this->_data;
+				this->_alloc.deallocate(this->_data, this->_nodeSize);
 			this->_size = x._size;
-			this->_data = new value_type[DEQUE_NODE_SIZE];
+			this->_data = this->_alloc.allocate(this->_nodeSize);
 			for (size_type i = 0; i < this->_size; i++)
-				this->_data[i] = x._data[i];
+				this->_alloc.construct(this->_data + i, x._data[i]);
 			return (*this);
 		}
 
 		~DequeNode()
 		{
+			clear();
 			if (this->_data != NULL)
-				delete[] this->_data;
+				this->_alloc.deallocate(this->_data, this->_nodeSize);
+		}
+
+		void clear()
+		{
+			for (size_type i = 0; i < this->_size; i++)
+				this->_alloc.destroy(this->_data + i);
+			this->_size = 0;
 		}
 
 	    size_type size() const
@@ -57,8 +67,8 @@ namespace ft
 		bool empty() const
 		{ return (!this->_size); }
 
-		bool isFull()
-		{ return (this->_size >= DEQUE_NODE_SIZE); }
+		bool isFull() const
+		{ return (this->_size >= this->_nodeSize); }
 
 		reference front()
 		{ return (this->_data[0]); }
@@ -66,11 +76,14 @@ namespace ft
 		reference back()
 		{ return (this->_data[this->_size - 1]); }
 		                                    
+		reference operator[] (size_type n)
+		{ return (this->_data[n]); }
+
 		void push(const value_type& val)
 		{
 			if (isFull())
 				return ;
-			this->_data[this->_size] = val;
+			this->_alloc.construct(this->_data + this->_size, val);
 			this->_size++;
 		}
 
@@ -78,11 +91,9 @@ namespace ft
 		{
 			if (empty())
 				return ;
+			this->_alloc.destroy(this->_data + this->_size - 1);
 			this->_size--;
 		}
-
-		reference at(size_type n)
-		{ return (this->_data[n]); }
 	};
 
 }
