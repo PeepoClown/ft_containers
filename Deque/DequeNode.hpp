@@ -94,6 +94,18 @@ namespace ft
 			this->_alloc.destroy(this->_data + this->_size - 1);
 			this->_size--;
 		}
+
+		void reverse()
+		{
+			for (size_type i = 0; i < this->_size / 2; i++) {
+				value_type tmpDest = this->_data[this->_size - 1 - i];
+				value_type tmpSrc = this->_data[i];
+				this->_alloc.destroy(this->_data + this->_size - 1 - i);
+				this->_alloc.construct(this->_data + this->_size - 1 - i, tmpSrc);
+				this->_alloc.destroy(this->_data + i);
+				this->_alloc.construct(this->_data + i, tmpDest);
+			}
+		}
 	};
 
 }
