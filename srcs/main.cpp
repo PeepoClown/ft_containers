@@ -1,6 +1,24 @@
 #include "containers.hpp"
 #include <iostream>
 
+class Test
+{
+private :
+	std::string i;
+public :
+	Test(std::string i = 0) : i(i) { std::cout << i << " created" << std::endl; }
+	Test(const Test& test) : i(test.i) { }
+	Test& operator= (const Test& test) { i = test.i; return (*this); }
+	~Test() { std::cout << i << " removed" << std::endl; }
+	friend std::ostream& operator<< (std::ostream& out, const Test& test);
+};
+
+std::ostream& operator<< (std::ostream& out, const Test& test)
+{
+	out << test.i;
+	return (out);
+}
+
 int		main()
 {
 	std::cout << "\e[1;38;5;218m                          VECTOR TEST\e[0m" << std::endl;

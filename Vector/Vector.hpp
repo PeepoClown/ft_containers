@@ -59,7 +59,8 @@ namespace ft
 
 	public :
 		explicit vector(const allocator_type &alloc = allocator_type())
-			: _data(NULL), _alloc(alloc), _size(0), _capacity(0) { }
+			: _data(NULL), _alloc(alloc), _size(0), _capacity(0)
+		{ }
 
 		explicit vector(size_type n, const value_type &val = value_type(),
 						const allocator_type &alloc = allocator_type())
@@ -142,7 +143,7 @@ namespace ft
 		void reserve(size_type n)
 		{
 			if (n <= this->_capacity)
-				return;
+				return ;
 			pointer newData = this->_alloc.allocate(n);
 			for (size_type i = 0; i < this->_size; i++)
 				this->_alloc.construct(newData + i, this->_data[i]);
@@ -224,7 +225,7 @@ namespace ft
 		void pop_back()
 		{
 			if (!this->_size)
-				return;
+				return ;
 			this->_alloc.destroy(this->_data + this->_size - 1);
 			this->_size--;
 		}
@@ -362,12 +363,8 @@ namespace ft
 	{ return (!(lhs < rhs)); }
 
 	template<typename T, typename Alloc>
-	void swap(vector<T, Alloc> &x, vector<T, Alloc> &y)
-	{
-		ft::swap(x._data, y._data);
-		ft::swap(x._size, y._size);
-		ft::swap(x._capacity, y._capacity);
-	}
+	void swap(vector<T, Alloc>& x, vector<T, Alloc>& y)
+	{ x.swap(y); }
 
 }
 

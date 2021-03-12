@@ -22,10 +22,12 @@ namespace ft
 
 	public :
 		explicit VectorIterator(pointer ptr = NULL)
-			: _ptr(ptr) { }
+			: _ptr(ptr)
+		{ }
 
 		VectorIterator(const VectorIterator& it)
-			: _ptr(it._ptr) { }
+			: _ptr(it._ptr)
+		{ }
 
 		VectorIterator& operator= (const VectorIterator& it)
 		{
@@ -125,10 +127,12 @@ namespace ft
 
 	public :
 		explicit VectorReverseIterator(pointer ptr = NULL)
-				: _ptr(ptr) { }
+			: _ptr(ptr)
+		{ }
 
 		VectorReverseIterator(const VectorReverseIterator& it)
-				: _ptr(it._ptr) { }
+			: _ptr(it._ptr)
+		{ }
 
 		VectorReverseIterator& operator= (const VectorReverseIterator& it)
 		{

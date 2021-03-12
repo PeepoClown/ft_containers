@@ -8,4 +8,4 @@ set(CMAKE_CXX_FLAGS "-Wall -Werror -Wextra -std=c++98")
 include_directories(.)
 include_directories(Utils)
 
-add_executable(containers Deque/Deque.hpp Deque/DequeNode.hpp Deque/DequeIterator.hpp srcs/dequeTest.cpp srcs/main.cpp)
+add_executable(containers Deque/Deque.hpp Deque/DequeIterator.hpp srcs/dequeTest.cpp srcs/main.cpp)

@@ -16,12 +16,6 @@ public :
 	friend std::ostream& operator<< (std::ostream& out, const Test& test);
 };
 
-std::ostream& operator<< (std::ostream& out, const Test& test)
-{
-	out << test.i;
-	return (out);
-}
-
 void	print_std_vec(std::vector<int>& vec)
 {
 	std::cout << "[std]" << std::endl;
