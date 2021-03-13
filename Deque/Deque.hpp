@@ -341,6 +341,7 @@ namespace ft
 			for (size_type i = pos + 1; i < oldSize; i++)
 				this->_alloc.construct(this->_data + i - 1, oldData[i]);
 			this->_size = oldSize - 1;
+			delete[] oldData;
 			return (iterator(this->_data + pos));
 		}
 
@@ -361,6 +362,7 @@ namespace ft
 			for (size_type i = pos + n; i < oldSize; i++)
 				this->_alloc.construct(this->_data + i - n, oldData[i]);
 			this->_size = oldSize - n;
+			delete[] oldData;
 			return (iterator(this->_data + pos));
 		}
 

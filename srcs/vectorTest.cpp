@@ -328,7 +328,7 @@ void	vectorTest()
 		ft_vec.push_back(11); ft_vec.push_back(22); ft_vec.push_back(33); ft_vec.push_back(44); ft_vec.push_back(55);
 		print_std_vec(std_vec);
 		print_ft_vec(ft_vec);
-		std::cout << "deelte 2 eleemts" << std::endl;
+		std::cout << "delete 2 eleemts" << std::endl;
 		std_vec.pop_back(); std_vec.pop_back();
 		ft_vec.pop_back(); ft_vec.pop_back();
 		print_std_vec(std_vec);
